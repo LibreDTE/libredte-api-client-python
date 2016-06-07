@@ -73,7 +73,8 @@ if generar.status_code!=200 :
     sys.exit('Error al generar DTE real: '+generar.json())
 
 # obtener el PDF del DTE
-generar_pdf = Cliente.post('/dte/documentos/generar_pdf', {'xml':generar.json()['xml']});
+generar_pdf_request = {'xml':generar.json()['xml'], 'compress': False}
+generar_pdf = Cliente.post('/dte/documentos/generar_pdf', generar_pdf_request);
 if generar_pdf.status_code!=200 :
     sys.exit('Error al generar PDF del DTE: '+generar_pdf.json())
 
