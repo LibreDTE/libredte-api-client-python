@@ -1,3 +1,5 @@
+# -*- coding: utf8 -*-
+
 """
 LibreDTE
 Copyright (C) SASCO SpA (https://sasco.cl)
@@ -22,26 +24,23 @@ import requests, json
 """
 Clase con las funcionalidades para integrar con LibreDTE
 @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
-@version 2016-06-05
+@version 2016-06-09
 """
-class LibreDTE () :
+class LibreDTE:
 
-    """
-    Constructor de la clase LibreDTE
-    @param hash Hash de autenticación del usuario
-    @param host Host con la dirección web base de LibreDTE
-    @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
-    @version 2016-06-05
-    """
     def __init__ (self, hash, url = 'https://libredte.cl', ssl_check = True) :
+        """Constructor de la clase LibreDTE
+        :param hash: hash Hash de autenticación del usuario
+        :param url: Host con la dirección web base de LibreDTE
+        :param ssl_check: si se debe o no verificar el certificado SSL del host
+        """
         self.url = url
         self.auth = requests.auth.HTTPBasicAuth(hash, 'X')
         self.ssl_check = ssl_check
 
-    """
-    Método que consume un servicio web de LibreDTE a través de POST
-    @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
-    @version 2016-06-05
-    """
     def post (self, api, data = None) :
+        """Método que consume un servicio web de LibreDTE a través de POST
+        :param api: Recurso de la API que se desea consumir (sin /api)
+        :param data: Datos que se codificarán como JSON y se enviarán al recurso
+        """
         return requests.post(self.url+'/api'+api, json.dumps(data), auth=self.auth, verify=self.ssl_check)

@@ -1,2 +1,6 @@
-sdk/__pycache__
+dist
+libredte.egg-info
+libredte/__pycache__
+libredte/*.pyc
+ejemplos/*.pdf
 

@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf8 -*-
+
 """
 LibreDTE
 Copyright (C) SASCO SpA (https://sasco.cl)
@@ -23,7 +26,7 @@ Ejemplo que muestra los pasos para:
  - Generar DTE real a partir del temporal
  - Obtener PDF a partir del DTE real
 @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
-@version 2016-06-05
+@version 2016-06-09
 """
 
 # datos a utilizar
@@ -54,10 +57,9 @@ dte = {
     ],
 }
 
-# incluir módulo de python
-import sys
-sys.path.append('../sdk')
-from LibreDTE import LibreDTE
+# módulos que se usarán
+from os import sys
+from libredte.sdk import LibreDTE
 
 # crear cliente
 Cliente = LibreDTE(hash, url)
