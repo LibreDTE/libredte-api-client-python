@@ -24,7 +24,7 @@ import requests, json
 """
 Clase con las funcionalidades para integrar con LibreDTE
 @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
-@version 2016-06-09
+@version 2016-06-22
 """
 class LibreDTE:
 
@@ -37,6 +37,12 @@ class LibreDTE:
         self.url = url
         self.auth = requests.auth.HTTPBasicAuth(hash, 'X')
         self.ssl_check = ssl_check
+
+    def get (self, api) :
+        """Método que consume un servicio web de LibreDTE a través de GET
+        :param api: Recurso de la API que se desea consumir (sin /api)
+        """
+        return requests.get(self.url+'/api'+api, auth=self.auth, verify=self.ssl_check)
 
     def post (self, api, data = None) :
         """Método que consume un servicio web de LibreDTE a través de POST
