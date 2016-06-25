@@ -49,4 +49,8 @@ class LibreDTE:
         :param api: Recurso de la API que se desea consumir (sin /api)
         :param data: Datos que se codificarán como JSON y se enviarán al recurso
         """
-        return requests.post(self.url+'/api'+api, json.dumps(data), auth=self.auth, verify=self.ssl_check)
+        if isinstance(data, str) :
+            data_json = data
+        else :
+            data_json = json.dumps(data)
+        return requests.post(self.url+'/api'+api, data_json, auth=self.auth, verify=self.ssl_check)
