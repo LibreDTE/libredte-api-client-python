@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 """
 LibreDTE
@@ -35,7 +35,7 @@ setup(
     name='libredte',
 
     # Versions should comply with PEP440
-    version='1.0.0a4',
+    version='1.0.0a5',
 
     description='SDK para conectar a LibreDTE',
     long_description="\n"+long_description,
