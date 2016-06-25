@@ -35,7 +35,7 @@ setup(
     name='libredte',
 
     # Versions should comply with PEP440
-    version='1.0.0a3',
+    version='1.0.0a4',
 
     description='SDK para conectar a LibreDTE',
     long_description="\n"+long_description,
@@ -70,6 +70,7 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
 
