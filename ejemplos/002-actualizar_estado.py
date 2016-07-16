@@ -43,7 +43,7 @@ from libredte.sdk import LibreDTE
 Cliente = LibreDTE(hash, url)
 
 # consultar estado de dte emitido
-estado = Cliente.get('/dte/dte_emitidos/actualizar_estado/'+str(dte)+'/'+str(folio)+'/'+str(rut)+'/'+str(metodo))
+estado = Cliente.get('/dte/dte_emitidos/actualizar_estado/'+str(dte)+'/'+str(folio)+'/'+str(rut)+'?usarWebservice='+str(metodo))
 if estado.status_code!=200 :
     sys.exit('Error al obtener el estado del DTE emitido: '+estado.json())
 print(estado.json())
