@@ -45,7 +45,7 @@ setup(
 
     # Author details
     author='Esteban De La Fuente Rubio, DeLaF',
-    author_email='esteban[at]sasco.cl',
+    author_email='esteban@sasco.cl',
 
     # Choose your license
     license='LGPL',
