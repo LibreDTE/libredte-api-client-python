@@ -35,7 +35,7 @@ setup(
     name='libredte',
 
     # Versions should comply with PEP440
-    version='1.0.0a5',
+    version='1.0.0a6',
 
     description='SDK para conectar a LibreDTE',
     long_description="\n"+long_description,
@@ -82,6 +82,6 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
 
     # List run-time dependencies here
-    install_requires=['requests'],
+    install_requires=['requests', 'lxml'],
 
 )
