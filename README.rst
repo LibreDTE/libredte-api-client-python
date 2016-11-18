@@ -15,7 +15,8 @@ Instalar desde PIP con:
 
     $ sudo pip install libredte
 
-### LXML en Microsoft Windows
+LXML en Microsoft Windows
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 En algunas versiones de Microsoft Windows (al menos 8 y 10) la instalación con
 PIP falla debido a que no es posible instalar LXML. Para solucionar esto y poder
