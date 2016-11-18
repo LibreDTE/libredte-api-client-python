@@ -15,6 +15,27 @@ Instalar desde PIP con:
 
     $ sudo pip install libredte
 
+### LXML en Microsoft Windows
+
+En algunas versiones de Microsoft Windows (al menos 8 y 10) la instalación con
+PIP falla debido a que no es posible instalar LXML. Para solucionar esto y poder
+instalar el SDK es necesario instalar LXML de manera manual. Se puede descargar
+`una versión binaria de LXML <http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml>`_
+según la versión de Python que estemos usando.
+
+Supongamos que tenemos Python 3.5 de 32 bits (independientemente que el sistema
+operativo sea de 64 bits). Debemos descargar el siguiente archivo
+`lxml‑3.6.4‑cp35‑cp35m‑win32.whl <http://www.lfd.uci.edu/~gohlke/pythonlibs/g7ckv9dk/lxml-3.6.4-cp35-cp35m-win32.whl>`_
+y procedemos a instalar con
+
+.. code:: shell
+
+    > pip.exe install lxml-3.6.4-cp35-cp35m-win32.whl
+
+Si usas otra versión de Python descarga la LXML que corresponda.
+
+Cuando tengas instalada la LXML procede a instalar el SDK de LibreDTE con PIP.
+
 Desarrolladores (ayuda mental)
 ------------------------------
 
