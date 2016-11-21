@@ -26,7 +26,7 @@ Ejemplo que muestra los pasos para:
  - Generar DTE real a partir del temporal
  - Obtener PDF a partir del DTE real
 @author Esteban De La Fuente Rubio, DeLaF (esteban[at]sasco.cl)
-@version 2016-06-09
+@version 2016-11-20
 """
 
 # datos a utilizar
@@ -75,8 +75,7 @@ if generar.status_code!=200 :
     sys.exit('Error al generar DTE real: '+generar.json())
 
 # obtener el PDF del DTE
-generar_pdf_request = {'xml':generar.json()['xml'], 'compress': False}
-generar_pdf = Cliente.post('/dte/documentos/generar_pdf', generar_pdf_request);
+generar_pdf = Cliente.get('/dte/dte_emitidos/pdf/'+str(generar.json()['dte'])+'/'+str(generar.json()['folio'])+'/'+str(generar.json()['emisor']));
 if generar_pdf.status_code!=200 :
     sys.exit('Error al generar PDF del DTE: '+generar_pdf.json())
 
