@@ -3,11 +3,11 @@ SDK de LibreDTE para Python
 
 .. image:: https://badge.fury.io/py/libredte.svg
     :target: https://pypi.python.org/pypi/libredte
-.. image:: https://img.shields.io/pypi/status/libredte.svg
+.. .. image:: https://img.shields.io/pypi/status/libredte.svg
     :target: https://pypi.python.org/pypi/libredte
 .. image:: https://img.shields.io/pypi/pyversions/libredte.svg
     :target: https://pypi.python.org/pypi/libredte
-.. image:: https://img.shields.io/pypi/l/libredte.svg
+.. .. image:: https://img.shields.io/pypi/l/libredte.svg
     :target: https://raw.githubusercontent.com/LibreDTE/libredte-lib/master/COPYING
 
 SDK para realizar la integración con los servicios web de LibreDTE desde Python.
