@@ -4,19 +4,21 @@
 LibreDTE
 Copyright (C) SASCO SpA (https://sasco.cl)
 
-Este programa es software libre: usted puede redistribuirlo y/o modificarlo
-bajo los términos de la GNU Lesser General Public License (LGPL) publicada
-por la Fundación para el Software Libre, ya sea la versión 3 de la Licencia,
-o (a su elección) cualquier versión posterior de la misma.
+Este programa es software libre: usted puede redistribuirlo y/o
+modificarlo bajo los términos de la Licencia Pública General Affero de GNU
+publicada por la Fundación para el Software Libre, ya sea la versión
+3 de la Licencia, o (a su elección) cualquier versión posterior de la
+misma.
 
-Este programa se distribuye con la esperanza de que sea útil, pero SIN
-GARANTÍA ALGUNA; ni siquiera la garantía implícita MERCANTIL o de APTITUD
-PARA UN PROPÓSITO DETERMINADO. Consulte los detalles de la GNU Lesser General
-Public License (LGPL) para obtener una información más detallada.
+Este programa se distribuye con la esperanza de que sea útil, pero
+SIN GARANTÍA ALGUNA; ni siquiera la garantía implícita
+MERCANTIL o de APTITUD PARA UN PROPÓSITO DETERMINADO.
+Consulte los detalles de la Licencia Pública General Affero de GNU para
+obtener una información más detallada.
 
-Debería haber recibido una copia de la GNU Lesser General Public License
-(LGPL) junto a este programa. En caso contrario, consulte
-<http://www.gnu.org/licenses/lgpl.html>.
+Debería haber recibido una copia de la Licencia Pública General Affero de GNU
+junto a este programa.
+En caso contrario, consulte <http://www.gnu.org/licenses/agpl.html>.
 """
 
 # Always prefer setuptools over distutils
@@ -32,10 +34,11 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
+
     name='libredte',
 
     # Versions should comply with PEP440
-    version='1.0.0a9',
+    version='2.0.0',
 
     description='SDK para conectar a LibreDTE',
     long_description="\n"+long_description,
@@ -48,7 +51,7 @@ setup(
     author_email='esteban@sasco.cl',
 
     # Choose your license
-    license='LGPL',
+    license='AGPL',
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
@@ -56,14 +59,15 @@ setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
+        #'Development Status :: 3 - Alpha',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
 
         # Pick your license as you wish (should match "license" above)
-        'License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)',
+        'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
