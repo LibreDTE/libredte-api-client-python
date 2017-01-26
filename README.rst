@@ -5,7 +5,7 @@ SDK de LibreDTE para Python
     :target: https://pypi.python.org/pypi/libredte
 .. .. image:: https://img.shields.io/pypi/status/libredte.svg
     :target: https://pypi.python.org/pypi/libredte
-.. image:: https://img.shields.io/pypi/pyversions/libredte.svg
+.. .. image:: https://img.shields.io/pypi/pyversions/libredte.svg
     :target: https://pypi.python.org/pypi/libredte
 .. .. image:: https://img.shields.io/pypi/l/libredte.svg
     :target: https://raw.githubusercontent.com/LibreDTE/libredte-lib/master/COPYING
