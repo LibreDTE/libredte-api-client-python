@@ -51,6 +51,15 @@ Instalar desde PIP con:
 
     $ sudo pip install libredte
 
+Actualización
+-------------
+
+Actualizar desde PIP con:
+
+.. code:: shell
+
+    $ sudo pip install libredte --upgrade
+
 LXML en Microsoft Windows
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
