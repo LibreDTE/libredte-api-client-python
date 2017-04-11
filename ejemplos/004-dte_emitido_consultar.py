@@ -46,7 +46,7 @@ from libredte.sdk import LibreDTE
 # crear cliente
 Cliente = LibreDTE(hash, url)
 
-# descargar timbre de dte emitido
+# consultar datos del dte emitido
 datos = {
     "emisor": rut,
     "dte": dte,
