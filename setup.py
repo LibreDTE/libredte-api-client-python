@@ -36,7 +36,7 @@ setup(
     name='libredte',
 
     # Versions should comply with PEP440
-    version='3.0.0',
+    version='3.0.1',
 
     description='SDK para conectar a LibreDTE',
     long_description="\n"+long_description,
