@@ -36,7 +36,7 @@ setup(
     name='libredte',
 
     # Versions should comply with PEP440
-    version='3.0.1',
+    version='3.0.2',
 
     description='SDK para conectar a LibreDTE',
     long_description="\n"+long_description,
@@ -53,12 +53,12 @@ setup(
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
+
         # How mature is this project? Common values are
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
         'Development Status :: 5 - Production/Stable',
-        #'Development Status :: 3 - Alpha',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
@@ -69,11 +69,13 @@ setup(
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+
     ],
 
     # What does your project relate to?
@@ -84,6 +86,6 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
 
     # List run-time dependencies here
-    install_requires=['requests', 'lxml', 'fpdf', 'pdf417gen', 'datetime', 'pyyaml', 'pyopenssl'],
+    install_requires=['requests'],
 
 )
