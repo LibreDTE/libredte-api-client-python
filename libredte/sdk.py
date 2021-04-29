@@ -44,7 +44,9 @@ class LibreDTE:
         self.url = url
         self.auth = requests.auth.HTTPBasicAuth(hash, 'X')
         self.ssl_check = ssl_check
-        self.rut = int(os.getenv('LIBREDTE_RUT'))
+        self.rut = os.getenv('LIBREDTE_RUT')
+        if self.rut is not None:
+            self.rut = int(self.rut)
 
     def get(self, api):
         """Método que consume un servicio web de LibreDTE a través de GET
