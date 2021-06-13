@@ -33,7 +33,7 @@ hash = ''
 rut = 76192083
 dte = 33
 folio = 394
-papelContinuo = 0; # =75 ó =80 para papel contínuo
+papelContinuo = 0 # =75 ó =80 para papel contínuo
 copias_tributarias = 1
 copias_cedibles = 1
 cedible = int(bool(copias_cedibles)) # =1 genera cedible, =0 no genera cedible
@@ -47,7 +47,7 @@ Cliente = LibreDTE(hash, url)
 
 # obtener el PDF del DTE
 opciones = '?papelContinuo='+str(papelContinuo)+'&copias_tributarias='+str(copias_tributarias)+'&copias_cedibles='+str(copias_cedibles)+'&cedible='+str(cedible)
-pdf = Cliente.get('/dte/dte_emitidos/pdf/'+str(dte)+'/'+str(folio)+'/'+str(rut)+opciones);
+pdf = Cliente.get('/dte/dte_emitidos/pdf/'+str(dte)+'/'+str(folio)+'/'+str(rut)+opciones)
 if pdf.status_code!=200 :
     sys.exit('Error al generar PDF del DTE: '+pdf.json())
 

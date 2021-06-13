@@ -70,12 +70,12 @@ if emitir.status_code!=200 :
     sys.exit('Error al emitir DTE temporal: '+emitir.json())
 
 # crear DTE real
-generar = Cliente.post('/dte/documentos/generar', emitir.json());
+generar = Cliente.post('/dte/documentos/generar', emitir.json())
 if generar.status_code!=200 :
     sys.exit('Error al generar DTE real: '+generar.json())
 
 # obtener el PDF del DTE
-generar_pdf = Cliente.get('/dte/dte_emitidos/pdf/'+str(generar.json()['dte'])+'/'+str(generar.json()['folio'])+'/'+str(generar.json()['emisor']));
+generar_pdf = Cliente.get('/dte/dte_emitidos/pdf/'+str(generar.json()['dte'])+'/'+str(generar.json()['folio'])+'/'+str(generar.json()['emisor']))
 if generar_pdf.status_code!=200 :
     sys.exit('Error al generar PDF del DTE: '+generar_pdf.json())
 
