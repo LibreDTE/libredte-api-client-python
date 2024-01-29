@@ -33,7 +33,7 @@ class ApiClient:
     permitiendo realizar operaciones GET y POST, y crear enlaces a recursos de LibreDTE.
 
     :param str url: URL base del servicio de LibreDTE.
-    :param requests.auth.HTTPBasicAuth auth: Autenticación para las solicitudes HTTP.
+    :param requests.auth.HTTPBasicAuth http_auth: Autenticación para las solicitudes HTTP.
     :param bool ssl_check: Indica si se debe verificar el certificado SSL del host.
     :param int rut: RUT del contribuyente en LibreDTE.
     """
@@ -60,7 +60,7 @@ class ApiClient:
         self.headers = self.__generate_headers()
         self.version = version or self.__DEFAULT_VERSION
         self.raise_for_status = raise_for_status
-        self.auth = requests.auth.HTTPBasicAuth(username, password)
+        self.http_auth = requests.auth.HTTPBasicAuth(username, password)
         self.set_ssl()
         self.set_contribuyente()
         self.set_ambiente_sii()
@@ -167,8 +167,10 @@ class ApiClient:
         :raises ApiException: Si el valor proporcionado para el ambiente es inválido.
         """
         ambiente = ambiente if ambiente is not None else getenv('LIBREDTE_AMBIENTE')
+        if ambiente == '':
+            ambiente = None
         if ambiente is not None:
-            ambiente = str(ambiente)
+            ambiente = str(ambiente).strip()
             if ambiente in ('0', 'produccion', 'prod', 'palena'):
                 ambiente = self.AMBIENTE_SII_PRODUCCION
             elif ambiente in ('1', 'pruebas',  'test', 'maullin'):
@@ -231,7 +233,9 @@ class ApiClient:
             except TypeError as e:
                 raise ApiException(f'Error al codificar los datos en JSON: {e}')
         try:
-            response = requests.request(method, full_url, data=data, headers=headers, verify=self.ssl_check)
+            response = requests.request(
+                method, full_url, data=data, headers=headers, auth=self.http_auth, verify=self.ssl_check
+            )
             return self.__check_and_return_response(response)
         except requests.exceptions.ConnectionError as error:
             raise ApiException(f'Error de conexión: {error}')
@@ -285,10 +289,13 @@ class ApiClient:
                 response.raise_for_status()
             except requests.exceptions.HTTPError as error:
                 try:
-                    error_message = error.response.json().get('message', 'Error desconocido.')
+                    body = error.response.json()
+                    error_message = body if isinstance(body, str) else body.get(
+                        'message', 'Error desconocido.'
+                    )
                 except json.decoder.JSONDecodeError:
                     error_message = f'Error al decodificar los datos en JSON: {error.response.text}'
-                raise ApiException(f'Error HTTP: {error_message}')
+                raise ApiException(f'Error HTTP: {error_message}', response.status_code)
         return response
 
     def create_link(self, resource, rut = None):

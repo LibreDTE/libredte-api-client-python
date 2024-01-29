@@ -43,7 +43,7 @@ class CustomTestResult(unittest.TextTestResult):
 tests_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Cargar variables de entorno para los tests
-if not load_dotenv(os.path.join(tests_dir, 'test.env')):
+if not load_dotenv(os.path.join(tests_dir, 'test.env'), override=True):
     print("\n[Error] No fue posible cargar las variables de entorno para los tests.")
     print(f"Corroborar que exista el archivo {tests_dir}/test.env y posea las variables definidas.\n")
     sys.exit()
