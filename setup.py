@@ -1,23 +1,21 @@
-# -*- coding: utf-8 -*-
-
-"""
-LibreDTE
-Copyright (C) SASCO SpA (https://sasco.cl)
-
-Este programa es software libre: usted puede redistribuirlo y/o modificarlo
-bajo los términos de la GNU Lesser General Public License (LGPL) publicada
-por la Fundación para el Software Libre, ya sea la versión 3 de la Licencia,
-o (a su elección) cualquier versión posterior de la misma.
-
-Este programa se distribuye con la esperanza de que sea útil, pero SIN
-GARANTÍA ALGUNA; ni siquiera la garantía implícita MERCANTIL o de APTITUD
-PARA UN PROPÓSITO DETERMINADO. Consulte los detalles de la GNU Lesser General
-Public License (LGPL) para obtener una información más detallada.
-
-Debería haber recibido una copia de la GNU Lesser General Public License
-(LGPL) junto a este programa. En caso contrario, consulte
-<http://www.gnu.org/licenses/lgpl.html>.
-"""
+#
+# LibreDTE: Cliente de API en Python.
+# Copyright (C) LibreDTE <https://www.libredte.cl>
+#
+# Este programa es software libre: usted puede redistribuirlo y/o modificarlo
+# bajo los términos de la GNU Lesser General Public License (LGPL) publicada
+# por la Fundación para el Software Libre, ya sea la versión 3 de la Licencia,
+# o (a su elección) cualquier versión posterior de la misma.
+#
+# Este programa se distribuye con la esperanza de que sea útil, pero SIN
+# GARANTÍA ALGUNA; ni siquiera la garantía implícita MERCANTIL o de APTITUD
+# PARA UN PROPÓSITO DETERMINADO. Consulte los detalles de la GNU Lesser General
+# Public License (LGPL) para obtener una información más detallada.
+#
+# Debería haber recibido una copia de la GNU Lesser General Public License
+# (LGPL) junto a este programa. En caso contrario, consulte
+# <http://www.gnu.org/licenses/lgpl.html>.
+#
 
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
@@ -36,20 +34,20 @@ setup(
     name='libredte',
 
     # Versions should comply with PEP440
-    version='3.1.1',
+    version='4.0.0',
 
-    description='SDK para conectar a LibreDTE',
+    description='Cliente para realizar la integración con los servicios web de LibreDTE desde Python.',
     long_description="\n"+long_description,
 
     # The project's main homepage.
-    url='https://github.com/LibreDTE/libredte-sdk-python',
+    url='https://github.com/LibreDTE/libredte-api-client-python',
 
     # Author details
-    author='Esteban De La Fuente Rubio, DeLaF',
-    author_email='esteban@sasco.cl',
+    author='LibreDTE',
+    author_email='dev@libredte.cl',
 
     # Choose your license
-    license='AGPL',
+    license='LGPL',
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
@@ -70,16 +68,11 @@ setup(
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
 
     ],
 
     # What does your project relate to?
-    keywords='facturación electrónica',
+    keywords='sii chile facturación electrónica',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().

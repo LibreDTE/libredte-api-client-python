@@ -1,13 +1,19 @@
-all: install dist
-
-install:
-	sudo pip install -e .
+all: dist
 
 dist:
-	sudo python setup.py sdist
+	python3 setup.py sdist
 
 upload: dist
 	twine upload dist/*
 
+install-dev:
+	python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt
+
+tests: install-dev
+	python tests/run.py
+
+docs:
+	sphinx-apidoc -o docs libredte && sphinx-build -b html docs docs/_build/html
+
 clean:
-	sudo rm -rf dist libredte.egg-info libredte/__pycache__ libredte/*.pyc ejemplos/*.pdf
+	rm -rf dist libredte.egg-info libredte/__pycache__ libredte/*.pyc

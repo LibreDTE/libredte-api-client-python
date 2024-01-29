@@ -1,6 +1,24 @@
+# Archivos de desarrollo
+venv
+__pycache__
+*.pyc
+
+# Archivos de documentación
+docs/_build/
+docs/html/
+docs/*.doctrees
+docs/.buildinfo
+
+# Archivos de distribución
 dist
 libredte.egg-info
-libredte/__pycache__
-libredte/*.pyc
-ejemplos/*.pdf
 
+# Archivos del sistema
+.DS_Store
+
+# Archivos de tests
+tests/test.env
+tests/*.json
+tests/*.csv
+tests/*.pdf
+tests/*.html

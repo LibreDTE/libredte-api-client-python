@@ -1,84 +1,92 @@
-SDK de LibreDTE para Python
-===========================
+LibreDTE: Cliente de API en Python
+==================================
 
 .. image:: https://badge.fury.io/py/libredte.svg
-    :target: https://pypi.python.org/pypi/libredte
+    :target: https://pypi.org/project/libredte
 .. image:: https://img.shields.io/pypi/status/libredte.svg
-    :target: https://pypi.python.org/pypi/libredte
+    :target: https://pypi.org/project/libredte
 .. image:: https://img.shields.io/pypi/pyversions/libredte.svg
-    :target: https://pypi.python.org/pypi/libredte
-.. .. image:: https://img.shields.io/pypi/l/libredte.svg
-    :target: https://raw.githubusercontent.com/LibreDTE/libredte-sdk-python/master/COPYING
+    :target: https://pypi.org/project/libredte
+.. image:: https://img.shields.io/pypi/l/libredte.svg
+    :target: https://raw.githubusercontent.com/LibreDTE/libredte-api-client-python/master/COPYING
 
-SDK para realizar la integración con los servicios web de LibreDTE desde Python.
+Cliente para realizar la integración con los servicios web de `LibreDTE <https://www.libredte.cl>`_ desde Python.
 
-Este código está liberado bajo licencia `LGPL <http://www.gnu.org/licenses/lgpl-3.0.en.html>`_.
-O sea, puede ser utilizado tanto en software libre como en software privativo.
+Instalación y actualización
+---------------------------
 
-Instalación
------------
-
-Instalar desde PIP con:
+Instalar usando un entorno virtual y PIP con:
 
 .. code:: shell
 
-    $ sudo pip install libredte
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install libredte
 
-Si estás en Microsoft Windows, debes instalar además
-`pypiwin32 <https://pypi.python.org/pypi/pypiwin32>`_.
-
-Actualización
--------------
-
-Actualizar desde PIP con:
+Actualizar usando PIP con:
 
 .. code:: shell
 
-    $ sudo pip install libredte --upgrade
+    pip install libredte --upgrade
 
-LXML en Microsoft Windows
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Autenticación en LibreDTE
+-------------------------
 
-En algunas versiones de Microsoft Windows (al menos 8 y 10) la instalación con
-PIP falla debido a que no es posible instalar LXML. Para solucionar esto y poder
-instalar el SDK es necesario instalar LXML de manera manual. Se puede descargar
-`una versión binaria de LXML <http://www.lfd.uci.edu/~gohlke/pythonlibs/#lxml>`_
-según la versión de Python que estemos usando.
-
-Supongamos que tenemos Python 3.5 de 32 bits (independientemente que el sistema
-operativo sea de 64 bits). Debemos descargar el siguiente archivo
-`lxml‑3.6.4‑cp35‑cp35m‑win32.whl <http://www.lfd.uci.edu/~gohlke/pythonlibs/g7ckv9dk/lxml-3.6.4-cp35-cp35m-win32.whl>`_
-y procedemos a instalar con
+Lo más simple, y recomendado, es usar una variable de entorno con el
+`hash del usuario <https://libredte.cl/usuarios/perfil#datos:hashField>`_,
+la cual será reconocida automáticamente por el cliente:
 
 .. code:: shell
 
-    > pip.exe install lxml-3.6.4-cp35-cp35m-win32.whl
+    export LIBREDTE_HASH="aquí-tu-hash-de-usuario"
 
-Si usas otra versión de Python descarga la LXML que corresponda.
+Si no se desea usar una variable de entorno, al instanciar los objetos se
+deberá indicar el hash del usuario. Ejemplo:
 
-Cuando tengas instalada la LXML procede a instalar el SDK de LibreDTE con PIP.
+.. code:: python
 
-Desarrolladores (ayuda mental)
-------------------------------
+    import libredte
+    LIBREDTE_HASH="aquí-tu-hash-de-usuario"
+    client = libredte.api_client.ApiClient(LIBREDTE_HASH)
 
-Modificar el SDK:
-
-.. code:: shell
-
-    $ git clone https://github.com/LibreDTE/libredte-sdk-python
-    $ cd libredte-sdk-python
-    $ sudo pip install -e .
-
-Crear el paquete que se desea distribuir:
+Si utilizas LibreDTE Edición Comunidad deberás además configurar la URL
+de tu servidor. Ejemplo:
 
 .. code:: shell
 
-    $ sudo python setup.py sdist
+    export LIBREDTE_URL="https://libredte.example.com"
 
-Publicar el paquete a distribuir:
+Y si deseas hacerlo sin la variable de entorno, debes pasar la URL como
+segundo parámetro en el constructor del cliente:
 
-.. code:: shell
+.. code:: python
 
-    $ twine upload dist/*
+    import libredte
+    LIBREDTE_HASH="aquí-tu-hash-de-usuario"
+    LIBREDTE_URL="https://libredte.example.com"
+    client = libredte.api_client.ApiClient(LIBREDTE_HASH, LIBREDTE_URL)
 
-Más información en `<http://python-packaging-user-guide.readthedocs.io/en/latest/distributing>`_
+Licencia
+--------
+
+Este programa es software libre: usted puede redistribuirlo y/o modificarlo
+bajo los términos de la GNU Lesser General Public License (LGPL) publicada
+por la Fundación para el Software Libre, ya sea la versión 3 de la Licencia,
+o (a su elección) cualquier versión posterior de la misma.
+
+Este programa se distribuye con la esperanza de que sea útil, pero SIN
+GARANTÍA ALGUNA; ni siquiera la garantía implícita MERCANTIL o de APTITUD
+PARA UN PROPÓSITO DETERMINADO. Consulte los detalles de la GNU Lesser General
+Public License (LGPL) para obtener una información más detallada.
+
+Debería haber recibido una copia de la GNU Lesser General Public License
+(LGPL) junto a este programa. En caso contrario, consulte
+`GNU Lesser General Public License <http://www.gnu.org/licenses/lgpl.html>`_.
+
+Enlaces
+-------
+
+- `Sitio web LibreDTE <https://www.libredte.cl>`_.
+- `Código fuente en GitHub <https://github.com/libredte/libredte-api-client-python>`_.
+- `Paquete en PyPI <https://pypi.org/project/libredte>`_.
+- `Documentación en Read the Docs <https://libredte.readthedocs.io/es/latest>`_.
