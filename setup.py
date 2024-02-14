@@ -34,7 +34,7 @@ setup(
     name='libredte',
 
     # Versions should comply with PEP440
-    version='4.0.1',
+    version='4.0.2',
 
     description='Cliente para realizar la integración con los servicios web de LibreDTE desde Python.',
     long_description="\n"+long_description,

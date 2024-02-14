@@ -295,7 +295,7 @@ class ApiClient:
                     )
                 except json.decoder.JSONDecodeError:
                     error_message = f'Error al decodificar los datos en JSON: {error.response.text}'
-                raise ApiException(f'Error HTTP: {error_message}', response.status_code)
+                raise ApiException(error_message, response.status_code)
         return response
 
     def create_link(self, resource, rut = None):
@@ -332,7 +332,9 @@ class ApiException(Exception):
 
     def __init__(self, message, code=None, params=None):
         self.message = message
-        super().__init__(message, code, params)
+        self.code = code
+        self.params = params
+        super().__init__(message)
 
     def __str__(self):
         """
