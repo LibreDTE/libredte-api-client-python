@@ -334,6 +334,25 @@ class ApiException(Exception):
         self.message = message
         super().__init__(message, code, params)
 
+    def __str__(self):
+        """
+        Devuelve una representación en cadena del error, proporcionando un contexto claro
+        del problema ocurrido. Esta representación incluye el prefijo "[LibreDTE]",
+        seguido del código de error si está presente, y el mensaje de error.
+
+        Si se especifica un código de error, el formato será:
+        "[LibreDTE] Error {code}: {message}"
+
+        Si no se especifica un código de error, el formato será:
+        "[LibreDTE] {message}"
+
+        :return: Una cadena que representa el error de una manera clara y concisa.
+        """
+        if self.code is not None:
+            return f"[LibreDTE] Error {self.code}: {self.message}"
+        else:
+            return f"[LibreDTE] {self.message}"
+
 class ApiBase(ABC):
     """
     Clase base para las clases que consumen la API (wrappers).
