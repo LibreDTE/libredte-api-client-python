@@ -22,6 +22,9 @@ from os import getenv
 from datetime import datetime
 import base64
 from libredte.api_client import ApiClient, ApiException
+from libredte.api_client.contribuyentes import Contribuyentes
+from libredte.api_client.cobros import Cobros
+from libredte.api_client.dte import Dte
 
 class TestBuscarDocumentoEmitido(unittest.TestCase):
 
@@ -30,17 +33,16 @@ class TestBuscarDocumentoEmitido(unittest.TestCase):
         cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
         cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
         cls.email = getenv('TEST_EMAIL')
-        cls.client = ApiClient()
-        cls.client.set_contribuyente(cls.contribuyente_rut)
-        cls.client.set_ambiente_sii(ApiClient.AMBIENTE_SII_PRUEBAS)
+        cls.dte = Dte()
+        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
+        cls.dte.client.set_ambiente_sii(ApiClient.AMBIENTE_SII_PRUEBAS)
 
     def _buscar(self):
         filtros = {
             'fecha_desde': '2015-01-01',
             'fecha_hasta': datetime.now().strftime("%Y-%m-%d"),
         }
-        resource = f'/dte/dte_emitidos/buscar/{self.contribuyente_rut}'
-        response = self.client.post(resource, filtros)
+        response = self.dte.get_dte_emitidos(filtros)
         return response.json()
 
     def test_dte_buscar_documento_emitido(self):
@@ -58,8 +60,10 @@ class TestBuscarDocumentoEmitido(unittest.TestCase):
     def test_dte_estado(self):
         try:
             documentos = self._buscar()
-            resource = f'/dte/dte_emitidos/actualizar_estado/{documentos[0]["dte"]}/{documentos[0]["folio"]}/{self.contribuyente_rut}?usarWebservice=1'
-            response = self.client.get(resource)
+            filtros = {
+                'usarWebservice': 1
+            }
+            response = self.dte.dte_emitidos_actualizar_estado(documentos[0]["dte"], documentos[0]["folio"], self.contribuyente_rut, filter = filtros)
             self.assertEqual(response.status_code, 200)
             if self.verbose:
                 dte_id = f'T{documentos[0]["dte"]}F{documentos[0]["folio"]}'
@@ -78,7 +82,7 @@ class TestBuscarDocumentoEmitido(unittest.TestCase):
                 'fecha': documentos[0]['fecha'],
                 'total': documentos[0]['total'],
             }
-            response = self.client.post('/dte/dte_emitidos/consultar', filtros)
+            response = self.dte.dte_emitidos_consultar(filtros=filtros)
             self.assertEqual(response.status_code, 200)
             if self.verbose:
                 dte_id = f'T{documentos[0]["dte"]}F{documentos[0]["folio"]}'
@@ -91,8 +95,10 @@ class TestBuscarDocumentoEmitido(unittest.TestCase):
         try:
             documentos = self._buscar()
             formato = 'xml'  # Opciones: png (defecto), bmp, xml
-            resource = f'/dte/dte_emitidos/ted/{documentos[0]["dte"]}/{documentos[0]["folio"]}/{self.contribuyente_rut}?formato={formato}'
-            response = self.client.get(resource)
+            filtros = {
+                'formato': formato
+            }
+            response = self.dte.dte_emitidos_ted(documentos[0]["dte"], documentos[0]["folio"], self.contribuyente_rut, filtros=filtros)
             self.assertEqual(response.status_code, 200)
             if self.verbose:
                 dte_id = f'T{documentos[0]["dte"]}F{documentos[0]["folio"]}'
@@ -104,7 +110,6 @@ class TestBuscarDocumentoEmitido(unittest.TestCase):
     def test_dte_email(self):
         try:
             documentos = self._buscar()
-            resource = f'/dte/dte_emitidos/enviar_email/{documentos[0]["dte"]}/{documentos[0]["folio"]}/{self.contribuyente_rut}'
             datos_email = {
                 'emails': [self.email],
                 'asunto': f'[LibreDTE API Client Test] Envío de DTE T{documentos[0]["dte"]}F{documentos[0]["folio"]} de {self.contribuyente_rut}',
@@ -113,7 +118,7 @@ class TestBuscarDocumentoEmitido(unittest.TestCase):
                 'cedible': True,
                 'papelContinuo': False,
             }
-            response = self.client.post(resource, datos_email)
+            response = self.dte.dte_real_enviar_email(documentos[0]["dte"], documentos[0]["folio"], self.contribuyente_rut, datos_email)
             self.assertEqual(response.status_code, 200)
             if self.verbose:
                 dte_id = f'T{documentos[0]["dte"]}F{documentos[0]["folio"]}'

@@ -22,7 +22,8 @@ from os import getenv, remove as file_remove
 from datetime import datetime
 import json
 import os
-from libredte.api_client import ApiClient, ApiException
+from libredte.api_client import ApiException
+from libredte.api_client.dte import Dte
 
 class TestEmitirDocumento(unittest.TestCase):
 
@@ -69,9 +70,9 @@ class TestEmitirDocumento(unittest.TestCase):
         fecha_emision = getenv('TEST_DTE_FACTURAR_FECHA_EMISION', datetime.now().strftime("%Y-%m-%d")).strip()
         cls.datos['Encabezado']['IdDoc']['FchEmis'] = fecha_emision
         cls.datos['Encabezado']['Emisor']['RUTEmisor'] = cls.contribuyente_rut
-        cls.client = ApiClient()
-        cls.client.set_contribuyente(cls.contribuyente_rut)
-        cls.client.set_ambiente_sii(ApiClient.AMBIENTE_SII_PRUEBAS)
+        cls.dte = Dte()
+        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
+        cls.dte.client.set_ambiente_sii(cls.dte.client.AMBIENTE_SII_PRUEBAS)
 
     def test_dte_facturar(self):
         dte_temporal = self._emitir_dte_temporal()
@@ -80,7 +81,7 @@ class TestEmitirDocumento(unittest.TestCase):
 
     def _emitir_dte_temporal(self):
         try:
-            response = self.client.post('/dte/documentos/emitir', self.datos)
+            response = self.dte.emitir_dte_temporal(self.datos)
             dte_temporal = response.json()
             if self.verbose:
                 print('test_dte_facturar(): dte_temporal', json.dumps(dte_temporal))
@@ -90,7 +91,7 @@ class TestEmitirDocumento(unittest.TestCase):
 
     def _generar_dte_emitido(self, dte_temporal):
         try:
-            response = self.client.post('/dte/documentos/generar', dte_temporal)
+            response = self.dte.emitir_dte_real(dte_temporal)
             dte_emitido = response.json()
             if self.verbose:
                 print('test_dte_facturar(): dte_emitido', json.dumps(dte_emitido))
@@ -99,13 +100,8 @@ class TestEmitirDocumento(unittest.TestCase):
             self.fail(f"ApiException: {e}")
 
     def _descargar_pdf(self, dte_emitido):
-        resource = '/dte/dte_emitidos/pdf/{}/{}/{}'.format(
-            dte_emitido['dte'],
-            dte_emitido['folio'],
-            dte_emitido['emisor']
-        )
         try:
-            response = self.client.get(resource)
+            response = self.dte.get_pdf_real(dte_emitido['dte'], dte_emitido['folio'], dte_emitido['emisor'])
             filename = os.path.join(
                 os.path.dirname(__file__),
                 os.path.basename(__file__).replace('.py', '.pdf')
