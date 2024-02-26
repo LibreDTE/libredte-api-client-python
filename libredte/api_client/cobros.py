@@ -54,3 +54,47 @@ class Cobros(ApiBase):
         :return: Respuesta JSON del resultado del pago del cobro.
         """
         return self.client.post(f'/pagos/cobros/pagar/{codigo}/{emisor}', data=pagar_cobro)
+
+    def get_cobro_dte_temporal(self, receptor, dte, codigo, emisor):
+        """
+        Obtiene la información de cobro asociada a un DTE temporal específico.
+
+        Realiza una solicitud POST para buscar información de cobro basada en un DTE temporal,
+        dado el RUT del receptor, el tipo de DTE, el código del DTE temporal, y el RUT del emisor.
+
+        :param str receptor: RUT del receptor asociado al DTE temporal.
+        :param str dte: Tipo de DTE temporal.
+        :param str codigo: Código único del DTE temporal.
+        :param str emisor: RUT del emisor del DTE temporal.
+        :return: Respuesta JSON con la información de cobro del DTE temporal.
+        """
+        return self.client.post(f'/dte/dte_tmps/cobro/{receptor}/{dte}/{codigo}/{emisor}')
+
+    def get_cobro_dte_real(self, dte, folio, emisor):
+        """
+        Obtiene la información de cobro asociada a un DTE real específico.
+
+        Envia una solicitud POST para buscar información de cobro basada en un DTE real,
+        dado el tipo de DTE, el folio del DTE, y el RUT del emisor.
+
+        :param str dte: Tipo de DTE real.
+        :param str folio: Folio del DTE real.
+        :param str emisor: RUT del emisor del DTE real.
+        :return: Respuesta JSON con la información de cobro del DTE real.
+        """
+        return self.client.post(f'/dte/dte_emitidos/cobro/{dte}/{folio}/{emisor}')
+
+    def get_cobro_info(self, codigo, emisor):
+        """
+        Obtiene información detallada de un cobro específico.
+
+        Realiza una solicitud POST para recuperar detalles completos sobre un cobro,
+        identificado por su código y el RUT del emisor. Esta información puede incluir
+        detalles del estado del cobro, montos, fechas relevantes, entre otros datos
+        específicos del cobro consultado.
+
+        :param str codigo: Código único que identifica el cobro.
+        :param str emisor: RUT del emisor asociado al cobro.
+        :return: Respuesta JSON con la información detallada del cobro.
+        """
+        return self.client.post(f'/pagos/cobros/info/{codigo}/{emisor}')

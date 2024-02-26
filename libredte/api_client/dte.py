@@ -27,14 +27,16 @@ class Dte(ApiBase):
     como obtener información del receptor, emitir y generar DTEs, tanto temporales como reales, y enviar DTEs por correo electrónico.
     """
 
-    def emitir_dte_temporal(self, dte_temporal):
+    def emitir_dte_temporal(self, dte_temporal, filtros=None):
         """
         Emite un DTE temporal.
 
         :param dict dte_temporal: Datos del DTE temporal a emitir.
+        :param dict filtros: Parámetros adicionales para la consulta (opcional).
         :return: Respuesta JSON del DTE temporal emitido.
         """
-        return self.client.post('/dte/documentos/emitir', data=dte_temporal)
+        filtros = '' if filtros is None else urlencode(filtros)
+        return self.client.post(f'/dte/documentos/emitir?{filtros}', data=dte_temporal)
 
     def get_dte_temporal(self, receptor, dte, codigo, emisor, filtros=None):
         """
@@ -50,14 +52,15 @@ class Dte(ApiBase):
         filtros = '' if filtros is None else urlencode(filtros)
         return self.client.get(f'/dte/dte_tmps/info/{receptor}/{dte}/{codigo}/{emisor}?{filtros}')
 
-    def emitir_dte_real(self, dte_real):
+    def emitir_dte_real(self, dte_real, filtros=None):
         """
         Genera un DTE real a partir de los datos proporcionados, correspondientes aun dte temporal.
 
         :param dict dte_real: Datos del DTE real a generar.
         :return: Respuesta JSON del DTE real generado.
         """
-        return self.client.post('/dte/documentos/generar', data=dte_real)
+        filtros = '' if filtros is None else urlencode(filtros)
+        return self.client.post(f'/dte/documentos/generar?{filtros}', data=dte_real)
 
     def get_dte_real(self, dte, folio, emisor, filtros=None):
         """
