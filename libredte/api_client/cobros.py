@@ -68,7 +68,7 @@ class Cobros(ApiBase):
         :param str emisor: RUT del emisor del DTE temporal.
         :return: Respuesta JSON con la información de cobro del DTE temporal.
         """
-        return self.client.post(f'/dte/dte_tmps/cobro/{receptor}/{dte}/{codigo}/{emisor}')
+        return self.client.get(f'/dte/dte_tmps/cobro/{receptor}/{dte}/{codigo}/{emisor}')
 
     def get_cobro_dte_real(self, dte, folio, emisor):
         """
@@ -82,7 +82,7 @@ class Cobros(ApiBase):
         :param str emisor: RUT del emisor del DTE real.
         :return: Respuesta JSON con la información de cobro del DTE real.
         """
-        return self.client.post(f'/dte/dte_emitidos/cobro/{dte}/{folio}/{emisor}')
+        return self.client.get(f'/dte/dte_emitidos/cobro/{dte}/{folio}/{emisor}')
 
     def get_cobro_info(self, codigo, emisor):
         """
@@ -97,4 +97,4 @@ class Cobros(ApiBase):
         :param str emisor: RUT del emisor asociado al cobro.
         :return: Respuesta JSON con la información detallada del cobro.
         """
-        return self.client.post(f'/pagos/cobros/info/{codigo}/{emisor}')
+        return self.client.get(f'/pagos/cobros/info/{codigo}/{emisor}')
