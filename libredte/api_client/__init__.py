@@ -54,13 +54,11 @@ class ApiClient:
         :param bool raise_for_status: Si se debe lanzar una excepción automáticamente para respuestas de error HTTP. Por defecto es True.
         :raises ApiException: Si el hash del usuario no es válido o está ausente.
         """
-        username = self.__validate_hash(hash)
-        password = 'X'
+        self.set_hash(hash)
         self.url = self.__validate_url(url)
         self.headers = self.__generate_headers()
         self.version = version or self.__DEFAULT_VERSION
         self.raise_for_status = raise_for_status
-        self.http_auth = requests.auth.HTTPBasicAuth(username, password)
         self.set_ssl()
         self.set_contribuyente()
         self.set_ambiente_sii()
@@ -150,6 +148,21 @@ class ApiClient:
                 raise ApiException(f'Valor de RUT inválido: {rut}')
         self.rut = rut
         return self.rut
+
+    def set_hash(self, hash):
+        """
+        Configura la autenticación HTTP básica usando un hash proporcionado.
+
+        Este método toma un hash, lo valida (o transforma) en un nombre de usuario mediante
+        `__validate_hash` y establece la autenticación HTTP básica para su uso en futuras
+        solicitudes HTTP. La contraseña se establece como un valor predeterminado 'X'.
+
+        :param str hash: Un hash que se valida y se usa para configurar el nombre de usuario
+                         en la autenticación HTTP básica.
+        """
+        username = self.__validate_hash(hash)
+        password = 'X'
+        self.http_auth = requests.auth.HTTPBasicAuth(username, password)
 
     def set_ambiente_sii(self, ambiente=None):
         """
