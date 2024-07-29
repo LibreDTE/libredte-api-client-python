@@ -36,4 +36,4 @@ sphinxcontrib-qthelp==1.0.6
 sphinxcontrib-serializinghtml==1.1.9
 twine==4.0.2
 urllib3==2.1.0
-zipp==3.17.0
+zipp==3.19.1
