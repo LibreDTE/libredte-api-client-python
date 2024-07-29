@@ -51,6 +51,18 @@ class Dte(ApiBase):
         """
         filtros = '' if filtros is None else urlencode(filtros)
         return self.client.get(f'/dte/dte_tmps/info/{receptor}/{dte}/{codigo}/{emisor}?{filtros}')
+    
+    def delete_dte_temporal(self, receptor, dte, codigo, emisor):
+        """
+        Elimina un DTE temporal específico.
+        
+        :param str receptor: RUT del receptor.
+        :param str dte: Tipo de DTE.
+        :param str codigo: Código del DTE temporal.
+        :param str emisor: RUT del emisor.
+        :return: Respuesta JSON con un boolean que retorna verdadero si se eliminó el DTE temporal.
+        """
+        return self.client.get(f'/dte/dte_tmps/eliminar/{receptor}/{dte}/{codigo}/{emisor}')
 
     def emitir_dte_real(self, dte_real, filtros=None):
         """
