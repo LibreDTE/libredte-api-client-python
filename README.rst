@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLibreDTE%2Flibredte-api-client-python.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLibreDTE%2Flibredte-api-client-python?ref=badge_shield)
+
 LibreDTE: Cliente de API en Python
 ==================================
 
@@ -90,3 +92,7 @@ Enlaces
 - `Código fuente en GitHub <https://github.com/libredte/libredte-api-client-python>`_.
 - `Paquete en PyPI <https://pypi.org/project/libredte>`_.
 - `Documentación en Read the Docs <https://libredte.readthedocs.io/es/latest>`_.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLibreDTE%2Flibredte-api-client-python.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FLibreDTE%2Flibredte-api-client-python?ref=badge_large)
