@@ -1,0 +1,195 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ejemplo &mdash; documentación de LibreDTE: Cliente de API en Python - 4</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=ca3dc111"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Desarrollo" href="dev.index.html" />
+    <link rel="prev" title="Configuración" href="gettingstarted.setup.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LibreDTE: Cliente de API en Python
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="gettingstarted.index.html">Empezando</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gettingstarted.legal.html">Licencia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gettingstarted.install.html">Instalación y actualización</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gettingstarted.setup.html">Configuración</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ejemplo</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev.index.html">Desarrollo</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">libredte</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibreDTE: Cliente de API en Python</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="gettingstarted.index.html">Empezando</a></li>
+      <li class="breadcrumb-item active">Ejemplo</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/gettingstarted.example.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ejemplo">
+<h1>Ejemplo<a class="headerlink" href="#ejemplo" title="Link to this heading"></a></h1>
+<section id="ejemplo-de-generar-un-dte-temporal">
+<h2>Ejemplo de Generar un DTE temporal<a class="headerlink" href="#ejemplo-de-generar-un-dte-temporal" title="Link to this heading"></a></h2>
+<p>Antes de probar, integrar y/o utilizar el cliente de API, necesitas haber definido previamente las variables de entorno.</p>
+<div class="admonition seealso">
+<p class="admonition-title">Ver también</p>
+<p>Para más información sobre este paso, referirse al la guía en <a class="reference external" href="gettingstarted.setup">Configuración</a>.</p>
+</div>
+<p>El siguiente es un ejemplo básico de cómo emitir un DTE usando el cliente de API de LibreDTE:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Importación de biblioteca de DTE del API Client, y biblioteca json.</span>
+<span class="kn">from</span> <span class="nn">libredte.api_client.dte</span> <span class="kn">import</span> <span class="n">Dte</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># Instanciación de cliente de API</span>
+<span class="n">dte</span> <span class="o">=</span> <span class="n">Dte</span><span class="p">()</span>
+
+<span class="c1"># RUT del emisor, con DV.</span>
+<span class="n">emisor_rut</span> <span class="o">=</span> <span class="s1">&#39;12345678-9&#39;</span>
+
+<span class="c1"># Datos del DTE temporal a crear.</span>
+<span class="n">datos</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Encabezado&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;IdDoc&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;TipoDTE&#39;</span><span class="p">:</span> <span class="mi">33</span><span class="p">,</span>
+            <span class="s1">&#39;FchEmis&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;Emisor&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;RUTEmisor&#39;</span><span class="p">:</span> <span class="n">emisor_rut</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;Receptor&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;RUTRecep&#39;</span><span class="p">:</span> <span class="s1">&#39;60803000-K&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;RznSocRecep&#39;</span><span class="p">:</span> <span class="s1">&#39;Servicio de Impuestos Internos (SII)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;GiroRecep&#39;</span><span class="p">:</span> <span class="s1">&#39;Administración Pública&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Contacto&#39;</span><span class="p">:</span> <span class="s1">&#39;+56 2 3252 5575&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;CorreoRecep&#39;</span><span class="p">:</span> <span class="s1">&#39;facturacionmipyme@sii.cl&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;DirRecep&#39;</span><span class="p">:</span> <span class="s1">&#39;Teatinos 120&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;CmnaRecep&#39;</span><span class="p">:</span> <span class="s1">&#39;Santiago&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;Detalle&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="c1">#&#39;IndExe&#39;: 1, # para items exentos</span>
+            <span class="s1">&#39;NmbItem&#39;</span><span class="p">:</span> <span class="s1">&#39;Asesoría de LibreDTE&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;QtyItem&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s1">&#39;PrcItem&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s1">&#39;Referencia&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s1">&#39;TpoDocRef&#39;</span><span class="p">:</span> <span class="mi">801</span><span class="p">,</span>
+            <span class="s1">&#39;FolioRef&#39;</span><span class="p">:</span> <span class="s1">&#39;OC123&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;FchRef&#39;</span><span class="p">:</span> <span class="s1">&#39;2015-10-01&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+<span class="p">}</span>
+
+<span class="c1"># Se efectua la solicitud HTTP llamando a un método del API client,</span>
+<span class="c1"># y se guarda la respuesta.</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">dte</span><span class="o">.</span><span class="n">emitir_dte_temporal</span><span class="p">(</span><span class="n">datos</span><span class="p">)</span>
+<span class="c1"># Se transforma el contenido a formato JSON.</span>
+<span class="n">dte_temporal</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">GENERAR DTE TEMP&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dte_temporal</span><span class="p">),</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="c1"># Se genera un DTE real utilizando datos del DTE temporal recientemente</span>
+<span class="c1"># generado.</span>
+<span class="n">dte_real</span> <span class="o">=</span> <span class="n">dte</span><span class="o">.</span><span class="n">emitir_dte_real</span><span class="p">(</span><span class="n">dte_temporal</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">GENERAR DTE REAL&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">dte_real</span><span class="p">),</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">Ver también</p>
+<p>Para saber más sobre los parámetros posibles y el cómo consumir los servicios de la API, referirse a la <a class="reference external" href="https://developers.libredte.cl/">documentación de LibreDTE.</a></p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="gettingstarted.setup.html" class="btn btn-neutral float-left" title="Configuración" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="dev.index.html" class="btn btn-neutral float-right" title="Desarrollo" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2024, LibreDTE.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pruebas unitarias &mdash; documentación de LibreDTE: Cliente de API en Python - 4</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=ca3dc111"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="libredte" href="modules.html" />
+    <link rel="prev" title="Desarrollo" href="dev.index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            LibreDTE: Cliente de API en Python
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="gettingstarted.index.html">Empezando</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="dev.index.html">Desarrollo</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Pruebas unitarias</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">libredte</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">LibreDTE: Cliente de API en Python</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="dev.index.html">Desarrollo</a></li>
+      <li class="breadcrumb-item active">Pruebas unitarias</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dev.unittest.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pruebas-unitarias">
+<h1>Pruebas unitarias<a class="headerlink" href="#pruebas-unitarias" title="Link to this heading"></a></h1>
+<div class="admonition important">
+<p class="admonition-title">Importante</p>
+<p>Al ejecutar pruebas, deberás tener configuradas las variables de entorno necesarias en el archivo test.env. Favor de duplicar test.env-dist, cambiar su nombre a test.env y rellenar las variables necesarias.</p>
+</div>
+<p>Antes de empezar, debes configurar las siguientes variables de entorno, como mínimo:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">LIBREDTE_URL</span><span class="o">=</span><span class="s2">&quot;https://libredte.cl&quot;</span>
+<span class="nv">LIBREDTE_HASH</span><span class="o">=</span><span class="s2">&quot;hash-libredte&quot;</span>
+<span class="nv">LIBREDTE_RUT</span><span class="o">=</span><span class="s2">&quot;66666666-6&quot;</span>
+</pre></div>
+</div>
+<p>Para ejecutar las pruebas unitarias se necesita tener instaladas las dependencias del archivo requirements.txt.</p>
+<p>Para ejecutar todas las pruebas, utilizar el siguiente comando:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py
+</pre></div>
+</div>
+<p>También es posible ejecutar un archivo de pruebas específico, indicando el archivo a utilizar. Ejemplo:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py<span class="w"> </span>dte_facturacion.test_generar_dte_temporal
+</pre></div>
+</div>
+<p>Además puedes elegir una única prueba específica, utilizando la ruta completa:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py<span class="w"> </span>dte_facturacion.test_buscar_documento_emitido.TestBuscarDocumentoEmitido.test_dte_buscar_documento_emitido
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Importante</p>
+<p>Para el ejemplo anterior, se necesita tener al menos 1 DTE emitido.</p>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="dev.index.html" class="btn btn-neutral float-left" title="Desarrollo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="libredte" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2024, LibreDTE.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
