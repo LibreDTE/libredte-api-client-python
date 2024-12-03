@@ -230,7 +230,8 @@ class ApiClient:
         :rtype: requests.Response
         :raises ApiException: Si el método HTTP no es soportado o si hay un error de conexión.
         """
-        api_path = f'/api/{resource}'
+        #api_path = f'/api/{resource}'
+        api_path = "/api/%(resource)s" % {'resource' : resource}
         full_url = urllib.parse.urljoin(self.url + '/', api_path.lstrip('/'))
         extra_params = {'_version': self.version}
         if self.rut is not None:
@@ -329,9 +330,16 @@ class ApiClient:
             raise ApiException(f'Valor de RUT inválido: {rut}')
         if resource:
             resource_base64 = base64.b64encode(resource.encode('utf-8')).decode('utf-8')
-            link = f'{self.url}/dte/contribuyentes/seleccionar/{rut}/{str(resource_base64)}'
+            link = "%(url)s/dte/contribuyentes/seleccionar/%(rut)s/%(resource_base64)s" % {
+                'url' : self.url,
+                'rut' : rut,
+                'resource_base64' : str(resource_base64)
+            }
         else:
-            link = f'{self.url}/dte/contribuyentes/seleccionar/{rut}'
+            link = "%(url)s/dte/contribuyentes/seleccionar/%(rut)s" % {
+                'url' : self.url,
+                'rut' : rut
+            }
         return link
 
 class ApiException(Exception):
@@ -364,9 +372,12 @@ class ApiException(Exception):
         :return: Una cadena que representa el error de una manera clara y concisa.
         """
         if self.code is not None:
-            return f"[LibreDTE] Error {self.code}: {self.message}"
+            return "[LibreDTE] Error %(code)s: %(message)s" % {
+                'code' : self.code,
+                'message' : self.message
+            }
         else:
-            return f"[LibreDTE] {self.message}"
+            return "[LibreDTE] %(message)s" % {'message' : self.message}
 
 class ApiBase(ABC):
     """

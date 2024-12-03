@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master  # Ejecuta pruebas al hacer push en la rama 'master'
+
+env:
+  env_var: ${{ vars.ENV_CONTEXT_VAR }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ['3.11']  # Puedes cambiar las versiones según necesites
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}  # Configura la versión de Python desde la matriz
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Python tests
+        env:
+          LIBREDTE_HASH: ${{ secrets.LIBREDTE_HASH }}
+          LIBREDTE_RUT: ${{ vars.LIBREDTE_RUT }}
+        run: |
+          python3 tests/run.py dte_facturacion.test_generar_dte_temporal
+
+      - name: Upload pytest result report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-results-python_${{ matrix.python-version }}.xml
+          path: var/tests-results.xml
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-coverage-python_${{ matrix.python-version }}.xml
+          path: var/tests-coverage.xml
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: var/tests-coverage.xml
+          fail_ci_if_error: true
+          verbose: true
+
+      - name: Display Python version
+        run: python --version

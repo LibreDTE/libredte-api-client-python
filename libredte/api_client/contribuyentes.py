@@ -38,4 +38,5 @@ class Contribuyentes(ApiBase):
         :param str rut: RUT del contribuyente a buscar.
         :return: Respuesta JSON con la información del contribuyente.
         """
-        return self.client.get(f'/dte/contribuyentes/info/{rut}')
+        url = "/dte/contribuyentes/info/%(rut)s" % {'rut' : rut}
+        return self.client.get(url)

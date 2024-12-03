@@ -38,7 +38,8 @@ class Cobros(ApiBase):
         :param dict cobro: Datos del cobro a buscar.
         :return: Respuesta JSON con la información del cobro.
         """
-        return self.client.post(f'/pagos/cobros/buscar/{emisor}', data=cobro)
+        url = "/pagos/cobros/buscar/%(emisor)s" % {'emisor' : emisor}
+        return self.client.post(url, data=cobro)
 
     def pagar_cobro(self, codigo, emisor, pagar_cobro):
         """
@@ -53,7 +54,11 @@ class Cobros(ApiBase):
         :param dict pagar_cobro: Datos del pago a realizar.
         :return: Respuesta JSON del resultado del pago del cobro.
         """
-        return self.client.post(f'/pagos/cobros/pagar/{codigo}/{emisor}', data=pagar_cobro)
+        url = "/pagos/cobros/pagar/%(codigo)s/%(emisor)s" % {
+            'codigo' : codigo,
+            'emisor' : emisor
+        }
+        return self.client.post(url, data=pagar_cobro)
 
     def get_cobro_dte_temporal(self, receptor, dte, codigo, emisor):
         """
@@ -68,7 +73,13 @@ class Cobros(ApiBase):
         :param str emisor: RUT del emisor del DTE temporal.
         :return: Respuesta JSON con la información de cobro del DTE temporal.
         """
-        return self.client.get(f'/dte/dte_tmps/cobro/{receptor}/{dte}/{codigo}/{emisor}')
+        url = "/dte/dte_tmps/cobro/%(receptor)s/%(dte)s/%(codigo)s/%(emisor)s" % {
+            'receptor' : receptor,
+            'dte' : dte,
+            'codigo' : codigo,
+            'emisor' : emisor
+        }
+        return self.client.get(url)
 
     def get_cobro_dte_real(self, dte, folio, emisor):
         """
@@ -82,7 +93,12 @@ class Cobros(ApiBase):
         :param str emisor: RUT del emisor del DTE real.
         :return: Respuesta JSON con la información de cobro del DTE real.
         """
-        return self.client.get(f'/dte/dte_emitidos/cobro/{dte}/{folio}/{emisor}')
+        url = "/dte/dte_emitidos/cobro/%(dte)s/%(folio)s/%(emisor)s" % {
+            'dte' : dte,
+            'folio' : folio,
+            'emisor' : emisor
+        }
+        return self.client.get(url)
 
     def get_cobro_info(self, codigo, emisor):
         """
@@ -97,4 +113,8 @@ class Cobros(ApiBase):
         :param str emisor: RUT del emisor asociado al cobro.
         :return: Respuesta JSON con la información detallada del cobro.
         """
-        return self.client.get(f'/pagos/cobros/info/{codigo}/{emisor}')
+        url = "/pagos/cobros/info/%(codigo)s/%(emisor)s" % {
+            'codigo' : codigo,
+            'emisor' : emisor
+        }
+        return self.client.get(url)

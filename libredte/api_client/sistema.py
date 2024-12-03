@@ -39,4 +39,5 @@ class Moneda(ApiBase):
         :param str day: Fecha de la consulta de la tasa de cambio.
         :return: Respuesta JSON con la tasa de cambio desde USD a la moneda especificada en la fecha indicada.
         """
-        return self.client.get(f'/sistema/general/moneda_cambios/tasa/USD/{to}/{day}')
+        url = "/sistema/general/moneda_cambios/tasa/USD/%(to)s/%(day)s" % {'to' : to, 'day' : day}
+        return self.client.get(url)
