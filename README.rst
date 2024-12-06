@@ -37,4 +37,4 @@ Enlaces
 - `Sitio web LibreDTE <https://www.libredte.cl>`_.
 - `Código fuente en GitHub <https://github.com/libredte/libredte-api-client-python>`_.
 - `Paquete en PyPI <https://pypi.org/project/libredte>`_.
-- `Documentación en Read the Docs <https://api-client-python.docs.libredte.cl>`_.
+- `Documentación <https://api-client-python.docs.libredte.cl>`_.
