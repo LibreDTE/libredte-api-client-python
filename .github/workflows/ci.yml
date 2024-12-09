@@ -50,13 +50,5 @@ jobs:
           name: tests-coverage-python_${{ matrix.python-version }}.xml
           path: var/tests-coverage.xml
 
-      - name: Upload to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: var/tests-coverage.xml
-          fail_ci_if_error: true
-          verbose: true
-
       - name: Display Python version
         run: python --version
