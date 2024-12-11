@@ -7,6 +7,14 @@ LibreDTE: Cliente de API en Python
     :target: https://pypi.org/project/libredte
 .. image:: https://img.shields.io/pypi/pyversions/libredte.svg
     :target: https://pypi.org/project/libredte
+.. image:: https://scrutinizer-ci.com/g/libredte/libredte-api-client-python/badges/quality-score.png?b=master
+    :target: https://scrutinizer-ci.com/g/libredte/libredte-api-client-python/
+.. image:: https://scrutinizer-ci.com/g/libredte/libredte-api-client-python/badges/coverage.png?b=master
+    :target: https://scrutinizer-ci.com/g/libredte/libredte-api-client-python/
+.. image:: https://app.fossa.com/api/projects/git%2Bgithub.com%2FLibreDTE%2Flibredte-api-client-python.svg?type=shield&issueType=license
+    :target: https://app.fossa.com/projects/git%2Bgithub.com%2FLibreDTE%2Flibredte-api-client-python?ref=badge_shield&issueType=license
+.. image:: https://app.fossa.com/api/projects/git%2Bgithub.com%2FLibreDTE%2Flibredte-api-client-python.svg?type=shield&issueType=security
+    :target: https://app.fossa.com/projects/git%2Bgithub.com%2FLibreDTE%2Flibredte-api-client-python?ref=badge_shield&issueType=security
 .. image:: https://img.shields.io/pypi/l/libredte.svg
     :target: https://raw.githubusercontent.com/LibreDTE/libredte-api-client-python/master/COPYING
 
