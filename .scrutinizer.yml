@@ -1,0 +1,29 @@
+checks:
+  python: true
+
+build:
+  nodes:
+    analysis:
+      tests:
+        override:
+          - php-scrutinizer-run
+          - command: make tests_dte_temp
+            coverage:
+              file: var/tests-coverage.xml
+              format: clover
+      environment:
+        python:
+          version: 3.11.10
+  dependencies:
+    before:
+      - pip install -r requirements.txt
+
+filter:
+  paths:
+    - libredte/*
+  excluded_paths:
+    - resources/*
+    - tests/*
+    - tools/*
+    - var/*
+    - vendor/*

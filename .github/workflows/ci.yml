@@ -35,7 +35,7 @@ jobs:
           LIBREDTE_HASH: ${{ secrets.LIBREDTE_HASH }}
           LIBREDTE_RUT: ${{ vars.LIBREDTE_RUT }}
         run: |
-          python3 tests/run.py dte_facturacion.test_generar_dte_temporal
+          make tests_dte_temp
 
       - name: Upload pytest result report
         if: failure()
