@@ -22,3 +22,4 @@ tests/*.json
 tests/*.csv
 tests/*.pdf
 tests/*.html
+tests/archivos/dte_facturacion/*

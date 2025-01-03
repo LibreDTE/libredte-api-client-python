@@ -36,6 +36,7 @@ jobs:
           LIBREDTE_RUT: ${{ vars.LIBREDTE_RUT }}
         run: |
           make tests_dte_temp
+          make tests_cobros
 
       - name: Upload pytest result report
         if: failure()

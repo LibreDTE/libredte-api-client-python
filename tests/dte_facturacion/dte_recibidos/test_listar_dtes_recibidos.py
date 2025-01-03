@@ -17,34 +17,45 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-import unittest
+from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
+from libredte.api_client import ApiException
+
 from os import getenv
+
 import json
-from libredte.api_client import ApiClient, ApiException
-from libredte.api_client.dte import Dte
 
-
-class TestDteTemporal(unittest.TestCase):
+class TestListarDtesRecibidos(AbstractDteFacturacion):
+    """
+    Clase de pruebas para listar DTEs recibidos.
+    """
 
     @classmethod
     def setUpClass(cls):
+        """
+        Método de inicialización de variables y clases a utilizar.
+        """
         cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
         cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        cls.receptor = getenv('TEST_RECEPTOR')
-        cls.tipo_dte = getenv('TEST_DTE')
-        cls.codigo_dte = getenv('TEST_CODIGO')
-        cls.emisor = getenv('TEST_EMISOR')
-        cls.dte = Dte()
         cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(ApiClient.AMBIENTE_SII_PRUEBAS)
-    
-    def test_eliminar_dte_temporal(self):
+        cls.dte.client.set_ambiente_sii(cls.dte.client.AMBIENTE_SII_PRUEBAS)
+
+    def test_listar_dtes_recibidos(self):
+        """
+        Método de test para obtener una lista de DTEs recibidos.
+        """
         try:
-            response = self.dte.delete_dte_temporal(self.receptor, self.tipo_dte, self.codigo_dte, self.emisor)
-            dte_eliminado = response.json()
+            # Se llama al método del abstract para listar DTEs recibidos.
+            response = self._listar_dtes_recibidos(self.contribuyente_rut)
 
+            # Si el listado no falla, el programa pasa automáticamente.
+            self.assertTrue(True)
+
+            # Si verbose es True, se despliega en pantalla el resultado.
             if self.verbose:
-                print('test_dte_temporal(): dte_eliminado', json.dumps(dte_eliminado))
+                print(
+                    'test_listar_dte_recibidos() dtes_recibidos:',
+                    json.dumps(response.json())
+                )
         except ApiException as e:
-            self.fail(f"ApiException: {e}")
-
+            # Falla si se obtiene error de API Exception.
+            self.fail('ApiException: %(e)s' % {'e' : e})

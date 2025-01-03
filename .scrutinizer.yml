@@ -6,7 +6,7 @@ build:
     analysis:
       tests:
         override:
-          - php-scrutinizer-run
+          - python-scrutinizer-run
           - command: make tests_dte_temp
             coverage:
               file: var/tests-coverage.xml

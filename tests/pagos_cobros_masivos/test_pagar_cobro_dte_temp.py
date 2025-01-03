@@ -17,16 +17,21 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-import unittest
-from os import getenv, remove as file_remove
-from datetime import datetime
-import json
-import os
+from tests.pagos_cobros_masivos.abstract_pagos_cobros_masivos import AbstractPagosCobrosMasivos
+
 from libredte.api_client import ApiException
-from libredte.api_client.dte import Dte
 
-class TestEmitirDocumento(unittest.TestCase):
+from datetime import datetime
+from os import getenv
 
+import json
+
+class TestPagarCobroDteTemp(AbstractPagosCobrosMasivos):
+    """
+    Clase de pruebas para pagar cobros de DTEs temporales.
+    """
+
+    # Diccionario de datos de un DTE para emitir.
     datos = {
         'Encabezado': {
             'IdDoc': {
@@ -65,51 +70,51 @@ class TestEmitirDocumento(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        """
+        Método de inicialización de variables y clases a utilizar.
+        """
         cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
         cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        fecha_emision = getenv('TEST_DTE_FACTURAR_FECHA_EMISION', datetime.now().strftime("%Y-%m-%d")).strip()
+        fecha_emision = getenv('TEST_DTE_FACTURAR_FECHA_EMISION', datetime.now().strftime('%Y-%m-%d')).strip()
         cls.datos['Encabezado']['IdDoc']['FchEmis'] = fecha_emision
         cls.datos['Encabezado']['Emisor']['RUTEmisor'] = cls.contribuyente_rut
-        cls.dte = Dte()
         cls.dte.client.set_contribuyente(cls.contribuyente_rut)
         cls.dte.client.set_ambiente_sii(cls.dte.client.AMBIENTE_SII_PRUEBAS)
 
-    def test_dte_facturar(self):
-        dte_temporal = self._emitir_dte_temporal()
-        dte_emitido = self._generar_dte_emitido(dte_temporal) # AKA: dte real
-        self._descargar_pdf(dte_emitido)
-
-    def _emitir_dte_temporal(self):
+    def test_pagar_cobro_dte_temp(self):
+        """
+        Método de test para pagar un cobro asociado a un DTE temporal.
+        """
         try:
-            response = self.dte.emitir_dte_temporal(self.datos)
-            dte_temporal = response.json()
-            if self.verbose:
-                print('test_dte_facturar(): dte_temporal', json.dumps(dte_temporal))
-            return dte_temporal
-        except ApiException as e:
-            self.fail(f"ApiException: {e}")
-
-    def _generar_dte_emitido(self, dte_temporal):
-        try:
-            response = self.dte.emitir_dte_real(dte_temporal)
-            dte_emitido = response.json()
-            if self.verbose:
-                print('test_dte_facturar(): dte_emitido', json.dumps(dte_emitido))
-            return dte_emitido
-        except ApiException as e:
-            self.fail(f"ApiException: {e}")
-
-    def _descargar_pdf(self, dte_emitido):
-        try:
-            response = self.dte.get_pdf_real(dte_emitido['dte'], dte_emitido['folio'], dte_emitido['emisor'])
-            filename = os.path.join(
-                os.path.dirname(__file__),
-                os.path.basename(__file__).replace('.py', '.pdf')
+            # Se llama al método del abstract para buscar un cobro específico
+            # de un DTE temporal.
+            response_cobro = self._buscar_cobro_dte_temp(
+                self.contribuyente_rut,
+                self.datos
             )
-            with open(filename, 'wb') as f:
-                f.write(response.content)
-            file_remove(filename) # se borra el archivo inmediatamente (sólo se crea como ejemplo)
+            # Se pasan los datos del response a un diccionario.
+            cobro_dict = response_cobro.json()
+            # Datos de pago.
+            data = {
+                'medio': 'efectivo',
+                'fecha': datetime.now().strftime('%Y-%m-%d')
+            }
+            # Se intenta pagar el cobro.
+            response = self.cobros.pagar_cobro(
+                cobro_dict['codigo'],
+                self.contribuyente_rut,
+                data
+            )
+
+            # Se asegura que el codigo sea 200.
+            self.assertEqual(response.status_code, 200)
+
+            # Si verbose es True, se despliega en pantalla el resultado.
             if self.verbose:
-                print('test_dte_facturar(): filename', filename)
+                print(
+                    'test_pagar_cobro_dte_temp() cobro: ',
+                    json.dumps(response.json())
+                )
         except ApiException as e:
-            self.fail(f"ApiException: {e}")
+            # Falla si se obtiene error de API Exception o si el código no es 200.
+            self.fail('ApiException: %(e)s' % {'e' : e})

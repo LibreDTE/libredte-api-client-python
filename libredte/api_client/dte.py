@@ -23,11 +23,12 @@ class Dte(ApiBase):
     """
     Clase para interactuar con los endpoints de DTE de la API.
 
-    Esta clase hereda de ApiBase y proporciona métodos específicos para operaciones relacionadas con DTE,
-    como obtener información del receptor, emitir y generar DTEs, tanto temporales como reales, y enviar DTEs por correo electrónico.
+    Esta clase hereda de ApiBase y proporciona métodos específicos para operaciones
+    relacionadas con DTE, como obtener información del receptor, emitir y
+    generar DTEs, tanto temporales como reales, y enviar DTEs por correo electrónico.
     """
 
-    def emitir_dte_temporal(self, dte_temporal, filtros=None):
+    def emitir_dte_temporal(self, dte_temporal, filtros = None):
         """
         Emite un DTE temporal.
 
@@ -37,9 +38,9 @@ class Dte(ApiBase):
         """
         filtros = '' if filtros is None else urlencode(filtros)
         url = "/dte/documentos/emitir?%(filtros)s" % {'filtros' : filtros}
-        return self.client.post(url, data=dte_temporal)
+        return self.client.post(url, data = dte_temporal)
 
-    def get_dte_temporal(self, receptor, dte, codigo, emisor, filtros=None):
+    def get_dte_temporal(self, receptor, dte, codigo, emisor, filtros = None):
         """
         Obtiene información de un DTE temporal específico.
 
@@ -68,7 +69,8 @@ class Dte(ApiBase):
         :param str dte: Tipo de DTE.
         :param str codigo: Código del DTE temporal.
         :param str emisor: RUT del emisor.
-        :return: Respuesta JSON con un boolean que retorna verdadero si se eliminó el DTE temporal.
+        :return: Respuesta JSON con un boolean que retorna verdadero si se
+        eliminó el DTE temporal.
         """
         url = "/dte/dte_tmps/eliminar/%(receptor)s/%(dte)s/%(codigo)s/%(emisor)s" % {
             'receptor' : receptor,
@@ -78,18 +80,19 @@ class Dte(ApiBase):
         }
         return self.client.get(url)
 
-    def emitir_dte_real(self, dte_real, filtros=None):
+    def emitir_dte_real(self, dte_real, filtros = None):
         """
-        Genera un DTE real a partir de los datos proporcionados, correspondientes aun dte temporal.
+        Genera un DTE real a partir de los datos proporcionados, correspondientes
+        a un dte temporal.
 
         :param dict dte_real: Datos del DTE real a generar.
         :return: Respuesta JSON del DTE real generado.
         """
         filtros = '' if filtros is None else urlencode(filtros)
         url = "/dte/documentos/generar?%(filtros)s" % {'filtros' : filtros}
-        return self.client.post(url, data=dte_real)
+        return self.client.post(url, data = dte_real)
 
-    def get_dte_real(self, dte, folio, emisor, filtros=None):
+    def get_dte_real(self, dte, folio, emisor, filtros = None):
         """
         Obtiene información de un DTE real específico.
 
@@ -125,7 +128,7 @@ class Dte(ApiBase):
             'codigo' : codigo,
             'emisor' : emisor
         }
-        return self.client.post(url, data=data_email)
+        return self.client.post(url, data = data_email)
 
     def dte_real_enviar_email(self, dte, folio, emisor, data_email):
         """
@@ -142,9 +145,9 @@ class Dte(ApiBase):
             'folio' : folio,
             'emisor' : emisor
         }
-        return self.client.post(url, data=data_email)
+        return self.client.post(url, data = data_email)
 
-    def get_pdf_real(self, dte, folio, emisor, filtros=None):
+    def get_pdf_dte_real(self, dte, folio, emisor, filtros = None):
         """
         Obtiene el PDF de un DTE real específico.
 
@@ -172,9 +175,9 @@ class Dte(ApiBase):
         :return: Respuesta JSON con los DTEs emitidos que coinciden con los filtros.
         """
         url = "/dte/dte_emitidos/buscar/%(emisor)s" % {'emisor' : emisor}
-        return self.client.post(url, data=filtros)
+        return self.client.post(url, data = filtros)
 
-    def dte_emitidos_actualizar_estado(self, dte, folio, emisor, filtros=None):
+    def dte_emitidos_actualizar_estado(self, dte, folio, emisor, filtros = None):
         """
         Actualiza el estado de un DTE emitido.
 
@@ -200,9 +203,9 @@ class Dte(ApiBase):
         :param dict filtros: Filtros de búsqueda para aplicar en la consulta.
         :return: Respuesta JSON con los DTEs emitidos que coinciden con los filtros.
         """
-        return self.client.post('/dte/dte_emitidos/consultar', data=filtros)
+        return self.client.post('/dte/dte_emitidos/consultar', data = filtros)
 
-    def dte_emitidos_ted(self, dte, folio, emisor, filtros=None):
+    def dte_emitidos_ted(self, dte, folio, emisor, filtros = None):
         """
         Obtiene el TED (Timbre Electrónico de DTE) de un DTE emitido.
 
@@ -221,7 +224,7 @@ class Dte(ApiBase):
         }
         return self.client.get(url)
 
-    def listar_dtes_temporales(self, emisor, filtros):
+    def get_dte_temporales(self, emisor, filtros):
         """
         Obtiene un listado de DTEs temporales.
 
@@ -230,20 +233,9 @@ class Dte(ApiBase):
         :return: Respuesta JSON con la lista del DTEs temporales.
         """
         url = "/dte/dte_tmps/buscar/%(emisor)s" % {'emisor' : emisor}
-        return self.client.post(url, data=filtros)
+        return self.client.post(url, data = filtros)
 
-    def listar_dtes_emitidos(self, emisor, filtros):
-        """
-        Obtiene un listado de DTEs emitidos (reales).
-
-        :param str emisor: RUT del emisor.
-        :param dict filtros: Parámetros adicionales para la consulta (opcional).
-        :return: Respuesta JSON con la lista del DTEs emitidos.
-        """
-        url = "/dte/dte_emitidos/buscar/%(emisor)s" % {'emisor' : emisor}
-        return self.client.post(url, data=filtros)
-
-    def listar_dtes_recibidos(self, receptor, filtros):
+    def get_dte_recibidos(self, receptor, filtros):
         """
         Obtiene un listado de DTEs recibidos.
 
@@ -251,13 +243,16 @@ class Dte(ApiBase):
         :param dict filtros: Parámetros adicionales para la consulta (opcional).
         :return: Respuesta JSON con la lista del DTEs recibidos.
         """
-        url = "/dte/dte_recibidos/buscar/%(receptor)s" % {'receptor' : receptor}
-        return self.client.post(url, data=filtros)
+        url = "/dte/dte_recibidos/buscar/%(receptor)s" % {
+            'receptor' : receptor
+        }
+        return self.client.post(url, data = filtros)
 
-    def get_pdf_temporal(self, receptor, dte, codigo, emisor, filtros=None):
+    def get_pdf_dte_temporal(self, receptor, dte, codigo, emisor, filtros = None):
         """
-        Obtiene el PDF de un DTE real específico.
+        Obtiene el PDF de un DTE temporal específico.
 
+        :param str receptor: RUT del receptor.
         :param str dte: Tipo de DTE.
         :param str codigo: Código del DTE.
         :param str emisor: RUT del emisor.
@@ -271,6 +266,24 @@ class Dte(ApiBase):
             'codigo' : codigo,
             'emisor' : emisor,
             'filtros' : filtros
+        }
+        return self.client.get(url)
+
+    def get_xml_dte_temporal(self, receptor, dte, codigo, emisor):
+        """
+        Obtiene un XML de un DTE temporal.
+
+        :param str receptor: RUT del receptor.
+        :param str dte: Tipo de DTE.
+        :param str codigo: Codigo del DTE emitido.
+        :param str emisor: RUT del emisor.
+        :return: Respuesta codificada en base64 con el XML del DTE emitido.
+        """
+        url = "/dte/dte_tmps/xml/%(receptor)s/%(dte)s/%(codigo)s/%(emisor)s" % {
+            'receptor': receptor,
+            'dte' : dte,
+            'codigo' : codigo,
+            'emisor' : emisor
         }
         return self.client.get(url)
 
@@ -308,7 +321,7 @@ class Dte(ApiBase):
         }
         return self.client.get(url)
 
-    def get_dte_recibido(self, emisor, dte, folio, receptor, filtros=None):
+    def get_dte_recibido(self, emisor, dte, folio, receptor, filtros = None):
         """
         Obtiene información de un DTE temporal específico.
 
