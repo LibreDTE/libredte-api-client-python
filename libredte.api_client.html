@@ -102,30 +102,11 @@
 <p>Proporciona métodos para realizar operaciones relacionadas con cobros,
 como obtener información sobre cobros específicos y realizar pagos de cobros.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="libredte.api_client.cobros.Cobros.get_cobro">
-<span class="sig-name descname"><span class="pre">get_cobro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cobro</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.cobros.Cobros.get_cobro" title="Link to this definition"></a></dt>
-<dd><p>Obtiene la información de un cobro específico.</p>
-<p>Realiza una solicitud POST para buscar información sobre un cobro dado
-el identificador del emisor y los datos del cobro.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>emisor</strong> (<em>str</em>) – Identificador del emisor del cobro.</p></li>
-<li><p><strong>cobro</strong> (<em>dict</em>) – Datos del cobro a buscar.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>Respuesta JSON con la información del cobro.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="libredte.api_client.cobros.Cobros.get_cobro_dte_real">
 <span class="sig-name descname"><span class="pre">get_cobro_dte_real</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.cobros.Cobros.get_cobro_dte_real" title="Link to this definition"></a></dt>
 <dd><p>Obtiene la información de cobro asociada a un DTE real específico.</p>
-<p>Envia una solicitud POST para buscar información de cobro basada en un DTE real,
-dado el tipo de DTE, el folio del DTE, y el RUT del emisor.</p>
+<p>Envia una solicitud POST para buscar información de cobro basada en un
+DTE real, dado el tipo de DTE, el folio del DTE, y el RUT del emisor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -144,8 +125,9 @@ dado el tipo de DTE, el folio del DTE, y el RUT del emisor.</p>
 <dt class="sig sig-object py" id="libredte.api_client.cobros.Cobros.get_cobro_dte_temporal">
 <span class="sig-name descname"><span class="pre">get_cobro_dte_temporal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">receptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codigo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.cobros.Cobros.get_cobro_dte_temporal" title="Link to this definition"></a></dt>
 <dd><p>Obtiene la información de cobro asociada a un DTE temporal específico.</p>
-<p>Realiza una solicitud POST para buscar información de cobro basada en un DTE temporal,
-dado el RUT del receptor, el tipo de DTE, el código del DTE temporal, y el RUT del emisor.</p>
+<p>Realiza una solicitud POST para buscar información de cobro basada en un
+DTE temporal, dado el RUT del receptor, el tipo de DTE, el código del
+DTE temporal, y el RUT del emisor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -165,10 +147,10 @@ dado el RUT del receptor, el tipo de DTE, el código del DTE temporal, y el RUT 
 <dt class="sig sig-object py" id="libredte.api_client.cobros.Cobros.get_cobro_info">
 <span class="sig-name descname"><span class="pre">get_cobro_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">codigo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.cobros.Cobros.get_cobro_info" title="Link to this definition"></a></dt>
 <dd><p>Obtiene información detallada de un cobro específico.</p>
-<p>Realiza una solicitud POST para recuperar detalles completos sobre un cobro,
-identificado por su código y el RUT del emisor. Esta información puede incluir
-detalles del estado del cobro, montos, fechas relevantes, entre otros datos
-específicos del cobro consultado.</p>
+<p>Realiza una solicitud POST para recuperar detalles completos sobre un
+cobro, identificado por su código y el RUT del emisor. Esta información
+puede incluir detalles del estado del cobro, montos, fechas relevantes,
+entre otros datos específicos del cobro consultado.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -178,6 +160,25 @@ específicos del cobro consultado.</p>
 </dd>
 <dt class="field-even">Devuelve<span class="colon">:</span></dt>
 <dd class="field-even"><p>Respuesta JSON con la información detallada del cobro.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="libredte.api_client.cobros.Cobros.get_cobros">
+<span class="sig-name descname"><span class="pre">get_cobros</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.cobros.Cobros.get_cobros" title="Link to this definition"></a></dt>
+<dd><p>Obtiene la información de varios cobros.</p>
+<p>Realiza una solicitud POST para buscar información sobre múltiples cobros
+dado el identificador del emisor y filtros de los cobros.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emisor</strong> (<em>str</em>) – Identificador del emisor de los cobros.</p></li>
+<li><p><strong>filtros</strong> (<em>dict</em>) – Datos de filtrado de cobros.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>Respuesta JSON con la información del cobro.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -242,8 +243,9 @@ contribuyente, dirección, y otros detalles relevantes.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">libredte.api_client.dte.</span></span><span class="sig-name descname"><span class="pre">Dte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_hash</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_raise_for_status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#libredte.api_client.ApiBase" title="libredte.api_client.ApiBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">ApiBase</span></code></a></p>
 <p>Clase para interactuar con los endpoints de DTE de la API.</p>
-<p>Esta clase hereda de ApiBase y proporciona métodos específicos para operaciones relacionadas con DTE,
-como obtener información del receptor, emitir y generar DTEs, tanto temporales como reales, y enviar DTEs por correo electrónico.</p>
+<p>Esta clase hereda de ApiBase y proporciona métodos específicos para operaciones
+relacionadas con DTE, como obtener información del receptor, emitir y
+generar DTEs, tanto temporales como reales, y enviar DTEs por correo electrónico.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="libredte.api_client.dte.Dte.delete_dte_temporal">
 <span class="sig-name descname"><span class="pre">delete_dte_temporal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">receptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codigo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.delete_dte_temporal" title="Link to this definition"></a></dt>
@@ -258,9 +260,10 @@ como obtener información del receptor, emitir y generar DTEs, tanto temporales 
 </ul>
 </dd>
 <dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>Respuesta JSON con un boolean que retorna verdadero si se eliminó el DTE temporal.</p>
+<dd class="field-even"><p>Respuesta JSON con un boolean que retorna verdadero si se</p>
 </dd>
 </dl>
+<p>eliminó el DTE temporal.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -357,7 +360,8 @@ como obtener información del receptor, emitir y generar DTEs, tanto temporales 
 <dl class="py method">
 <dt class="sig sig-object py" id="libredte.api_client.dte.Dte.emitir_dte_real">
 <span class="sig-name descname"><span class="pre">emitir_dte_real</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dte_real</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.emitir_dte_real" title="Link to this definition"></a></dt>
-<dd><p>Genera un DTE real a partir de los datos proporcionados, correspondientes aun dte temporal.</p>
+<dd><p>Genera un DTE real a partir de los datos proporcionados, correspondientes
+a un dte temporal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>dte_real</strong> (<em>dict</em>) – Datos del DTE real a generar.</p>
@@ -442,6 +446,23 @@ como obtener información del receptor, emitir y generar DTEs, tanto temporales 
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="libredte.api_client.dte.Dte.get_dte_recibidos">
+<span class="sig-name descname"><span class="pre">get_dte_recibidos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">receptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.get_dte_recibidos" title="Link to this definition"></a></dt>
+<dd><p>Obtiene un listado de DTEs recibidos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>receptor</strong> (<em>str</em>) – RUT del receptor.</p></li>
+<li><p><strong>filtros</strong> (<em>dict</em>) – Parámetros adicionales para la consulta (opcional).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>Respuesta JSON con la lista del DTEs recibidos.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="libredte.api_client.dte.Dte.get_dte_temporal">
 <span class="sig-name descname"><span class="pre">get_dte_temporal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">receptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codigo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.get_dte_temporal" title="Link to this definition"></a></dt>
 <dd><p>Obtiene información de un DTE temporal específico.</p>
@@ -462,8 +483,25 @@ como obtener información del receptor, emitir y generar DTEs, tanto temporales 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="libredte.api_client.dte.Dte.get_pdf_real">
-<span class="sig-name descname"><span class="pre">get_pdf_real</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.get_pdf_real" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="libredte.api_client.dte.Dte.get_dte_temporales">
+<span class="sig-name descname"><span class="pre">get_dte_temporales</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.get_dte_temporales" title="Link to this definition"></a></dt>
+<dd><p>Obtiene un listado de DTEs temporales.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>emisor</strong> (<em>str</em>) – RUT del emisor.</p></li>
+<li><p><strong>filtros</strong> (<em>dict</em>) – Parámetros adicionales para la consulta (opcional).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>Respuesta JSON con la lista del DTEs temporales.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="libredte.api_client.dte.Dte.get_pdf_dte_real">
+<span class="sig-name descname"><span class="pre">get_pdf_dte_real</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.get_pdf_dte_real" title="Link to this definition"></a></dt>
 <dd><p>Obtiene el PDF de un DTE real específico.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
@@ -481,12 +519,13 @@ como obtener información del receptor, emitir y generar DTEs, tanto temporales 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="libredte.api_client.dte.Dte.get_pdf_temporal">
-<span class="sig-name descname"><span class="pre">get_pdf_temporal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">receptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codigo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.get_pdf_temporal" title="Link to this definition"></a></dt>
-<dd><p>Obtiene el PDF de un DTE real específico.</p>
+<dt class="sig sig-object py" id="libredte.api_client.dte.Dte.get_pdf_dte_temporal">
+<span class="sig-name descname"><span class="pre">get_pdf_dte_temporal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">receptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codigo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.get_pdf_dte_temporal" title="Link to this definition"></a></dt>
+<dd><p>Obtiene el PDF de un DTE temporal específico.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>receptor</strong> (<em>str</em>) – RUT del receptor.</p></li>
 <li><p><strong>dte</strong> (<em>str</em>) – Tipo de DTE.</p></li>
 <li><p><strong>codigo</strong> (<em>str</em>) – Código del DTE.</p></li>
 <li><p><strong>emisor</strong> (<em>str</em>) – RUT del emisor.</p></li>
@@ -537,52 +576,20 @@ como obtener información del receptor, emitir y generar DTEs, tanto temporales 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="libredte.api_client.dte.Dte.listar_dtes_emitidos">
-<span class="sig-name descname"><span class="pre">listar_dtes_emitidos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.listar_dtes_emitidos" title="Link to this definition"></a></dt>
-<dd><p>Obtiene un listado de DTEs emitidos (reales).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>emisor</strong> (<em>str</em>) – RUT del emisor.</p></li>
-<li><p><strong>filtros</strong> (<em>dict</em>) – Parámetros adicionales para la consulta (opcional).</p></li>
-</ul>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>Respuesta JSON con la lista del DTEs emitidos.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="libredte.api_client.dte.Dte.listar_dtes_recibidos">
-<span class="sig-name descname"><span class="pre">listar_dtes_recibidos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">receptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.listar_dtes_recibidos" title="Link to this definition"></a></dt>
-<dd><p>Obtiene un listado de DTEs recibidos.</p>
+<dt class="sig sig-object py" id="libredte.api_client.dte.Dte.get_xml_dte_temporal">
+<span class="sig-name descname"><span class="pre">get_xml_dte_temporal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">receptor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codigo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.get_xml_dte_temporal" title="Link to this definition"></a></dt>
+<dd><p>Obtiene un XML de un DTE temporal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>receptor</strong> (<em>str</em>) – RUT del receptor.</p></li>
-<li><p><strong>filtros</strong> (<em>dict</em>) – Parámetros adicionales para la consulta (opcional).</p></li>
-</ul>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>Respuesta JSON con la lista del DTEs recibidos.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="libredte.api_client.dte.Dte.listar_dtes_temporales">
-<span class="sig-name descname"><span class="pre">listar_dtes_temporales</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">emisor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filtros</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.dte.Dte.listar_dtes_temporales" title="Link to this definition"></a></dt>
-<dd><p>Obtiene un listado de DTEs temporales.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
+<li><p><strong>dte</strong> (<em>str</em>) – Tipo de DTE.</p></li>
+<li><p><strong>codigo</strong> (<em>str</em>) – Codigo del DTE emitido.</p></li>
 <li><p><strong>emisor</strong> (<em>str</em>) – RUT del emisor.</p></li>
-<li><p><strong>filtros</strong> (<em>dict</em>) – Parámetros adicionales para la consulta (opcional).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>Respuesta JSON con la lista del DTEs temporales.</p>
+<dd class="field-even"><p>Respuesta codificada en base64 con el XML del DTE emitido.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -599,15 +606,18 @@ como obtener información del receptor, emitir y generar DTEs, tanto temporales 
 <p>Clase base para las clases que consumen la API (wrappers).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>api_hash</strong> (<em>str</em>) – Hash de autenticación del usuario. Si es None, se intentará obtener de la variable de entorno LIBREDTE_HASH.</p></li>
-<li><p><strong>api_url</strong> (<em>str</em>) – URL base del servicio de LibreDTE. Si es None, se intentará obtener de la variable de entorno LIBREDTE_URL o se usará la URL por defecto.</p></li>
-<li><p><strong>api_version</strong> (<em>str</em>) – Versión de la API a utilizar. Por defecto, se usa una versión predefinida.</p></li>
-<li><p><strong>api_raise_for_status</strong> (<em>bool</em>) – Si se debe lanzar una excepción automáticamente para respuestas de error HTTP. Por defecto es True.</p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Argumentos adicionales para la autenticación.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>api_hash</strong> (<em>str</em>) – Hash de autenticación del usuario. Si es None, se</p>
 </dd>
 </dl>
+<p>intentará obtener de la variable de entorno LIBREDTE_HASH.
+:param str api_url: URL base del servicio de LibreDTE. Si es None, se
+intentará obtener de la variable de entorno LIBREDTE_URL o se usará
+la URL por defecto.
+:param str api_version: Versión de la API a utilizar. Por defecto, se usa
+una versión predefinida.
+:param bool api_raise_for_status: Si se debe lanzar una excepción automáticamente
+para respuestas de error HTTP. Por defecto es True.
+:param dict kwargs: Argumentos adicionales para la autenticación.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -615,8 +625,9 @@ como obtener información del receptor, emitir y generar DTEs, tanto temporales 
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">libredte.api_client.</span></span><span class="sig-name descname"><span class="pre">ApiClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hash</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_for_status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.ApiClient" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Cliente API para integrarse con LibreDTE.</p>
-<p>Esta clase proporciona funcionalidades para interactuar con los servicios web de LibreDTE,
-permitiendo realizar operaciones GET y POST, y crear enlaces a recursos de LibreDTE.</p>
+<p>Esta clase proporciona funcionalidades para interactuar con los servicios
+web de LibreDTE, permitiendo realizar operaciones GET y POST, y crear
+enlaces a recursos de LibreDTE.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -645,16 +656,13 @@ permitiendo realizar operaciones GET y POST, y crear enlaces a recursos de Libre
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>resource</strong> (<em>str</em>) – Recurso al que se desea acceder en la plataforma de LibreDTE.</p></li>
-<li><p><strong>rut</strong> (<em>int</em>) – RUT del contribuyente en LibreDTE con el que se quiere usar el recurso. Si es None, se usará el RUT almacenado en la clase.</p></li>
+<li><p><strong>rut</strong> (<em>int</em>) – RUT del contribuyente en LibreDTE con el que se quiere</p></li>
 </ul>
 </dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>URL formada para acceder al recurso especificado.</p>
-</dd>
-<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
 </dl>
+<p>usar el recurso. Si es None, se usará el RUT almacenado en la clase.
+:return: URL formada para acceder al recurso especificado.
+:rtype: str</p>
 </dd></dl>
 
 <dl class="py method">
@@ -665,19 +673,15 @@ permitiendo realizar operaciones GET y POST, y crear enlaces a recursos de Libre
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>resource</strong> (<em>str</em>) – Recurso de la API que se desea consumir.</p></li>
-<li><p><strong>headers</strong> (<em>dict</em>) – Cabeceras adicionales para la solicitud. Si es None, se usarán las cabeceras por defecto.</p></li>
+<li><p><strong>headers</strong> (<em>dict</em>) – Cabeceras adicionales para la solicitud. Si es</p></li>
 </ul>
 </dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>Objeto de respuesta de la solicitud HTTP.</p>
-</dd>
-<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
-<dd class="field-odd"><p>requests.Response</p>
-</dd>
-<dt class="field-even">Muestra<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#libredte.api_client.ApiException" title="libredte.api_client.ApiException"><strong>ApiException</strong></a> – Lanza una excepción si ocurre un error en la solicitud HTTP, como errores de conexión, timeout o HTTP.</p>
-</dd>
 </dl>
+<p>None, se usarán las cabeceras por defecto.
+:return: Objeto de respuesta de la solicitud HTTP.
+:rtype: requests.Response
+:raises ApiException: Lanza una excepción si ocurre un error en la
+solicitud HTTP, como errores de conexión, timeout o HTTP.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -688,84 +692,75 @@ permitiendo realizar operaciones GET y POST, y crear enlaces a recursos de Libre
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>resource</strong> (<em>str</em>) – Recurso de la API que se desea consumir.</p></li>
-<li><p><strong>data</strong> (<em>dict</em><em>, </em><em>str</em>) – Datos que se enviarán con la solicitud. Si es un diccionario, se codificará como JSON.</p></li>
-<li><p><strong>headers</strong> (<em>dict</em>) – Cabeceras adicionales para la solicitud. Si es None, se usarán las cabeceras por defecto.</p></li>
+<li><p><strong>data</strong> (<em>dict</em><em>, </em><em>str</em>) – Datos que se enviarán con la solicitud. Si es</p></li>
 </ul>
 </dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>Objeto de respuesta de la solicitud HTTP.</p>
-</dd>
-<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
-<dd class="field-odd"><p>requests.Response</p>
-</dd>
-<dt class="field-even">Muestra<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#libredte.api_client.ApiException" title="libredte.api_client.ApiException"><strong>ApiException</strong></a> – Lanza una excepción si ocurre un error en la solicitud HTTP, como errores de conexión, timeout o HTTP.</p>
-</dd>
 </dl>
+<p>un diccionario, se codificará como JSON.
+:param dict headers: Cabeceras adicionales para la solicitud. Si es
+None, se usarán las cabeceras por defecto.
+:return: Objeto de respuesta de la solicitud HTTP.
+:rtype: requests.Response
+:raises ApiException: Lanza una excepción si ocurre un error en la
+solicitud HTTP, como errores de conexión, timeout o HTTP.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="libredte.api_client.ApiClient.set_ambiente_sii">
 <span class="sig-name descname"><span class="pre">set_ambiente_sii</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ambiente</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.ApiClient.set_ambiente_sii" title="Link to this definition"></a></dt>
-<dd><p>Establece el ambiente del Servicio de Impuestos Internos (SII) para las solicitudes de la API.</p>
-<p>Este método permite configurar el ambiente (producción o pruebas) que se utilizará en las
-solicitudes subsiguientes. El ambiente se puede especificar directamente o ser obtenido
-de la variable de entorno “LIBREDTE_AMBIENTE”. Los valores válidos son identificadores
-para producción (“0”, “produccion”, “prod”, “palena”) y pruebas (“1”, “pruebas”, “test”, “maullin”).</p>
+<dd><p>Establece el ambiente del Servicio de Impuestos Internos (SII) para
+las solicitudes de la API.</p>
+<p>Este método permite configurar el ambiente (producción o pruebas) que
+se utilizará en las solicitudes subsiguientes. El ambiente se puede
+especificar directamente o ser obtenido de la variable de entorno
+“LIBREDTE_AMBIENTE”. Los valores válidos son identificadores para
+producción (“0”, “produccion”, “prod”, “palena”) y pruebas (“1”,
+“pruebas”, “test”, “maullin”).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ambiente</strong> (<em>str</em>) – Identificador del ambiente a establecer. Si es None, se intentará obtener
-de la variable de entorno “LIBREDTE_AMBIENTE”.</p>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>El ambiente del SII configurado.</p>
-</dd>
-<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-<dt class="field-even">Muestra<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#libredte.api_client.ApiException" title="libredte.api_client.ApiException"><strong>ApiException</strong></a> – Si el valor proporcionado para el ambiente es inválido.</p>
+<dd class="field-odd"><p><strong>ambiente</strong> (<em>str</em>) – Identificador del ambiente a establecer. Si es None,</p>
 </dd>
 </dl>
+<p>se intentará obtener de la variable de entorno “LIBREDTE_AMBIENTE”.
+:return: El ambiente del SII configurado.
+:rtype: str
+:raises ApiException: Si el valor proporcionado para el ambiente es inválido.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="libredte.api_client.ApiClient.set_contribuyente">
 <span class="sig-name descname"><span class="pre">set_contribuyente</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.ApiClient.set_contribuyente" title="Link to this definition"></a></dt>
 <dd><p>Establece el RUT del contribuyente para las solicitudes de la API.</p>
-<p>Este método permite configurar el RUT del contribuyente que se utilizará en las
-solicitudes subsiguientes. Si se proporciona un RUT, este se utiliza; de lo contrario,
-se intenta obtener de la variable de entorno “LIBREDTE_RUT”.</p>
+<p>Este método permite configurar el RUT del contribuyente que se utilizará
+en las solicitudes subsiguientes. Si se proporciona un RUT, este se
+utiliza; de lo contrario, se intenta obtener de la variable de
+entorno “LIBREDTE_RUT”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rut</strong> (<em>int</em><em>, </em><em>str</em><em>, </em><em>optional</em>) – RUT del contribuyente a establecer. Si es None, se intentará obtener
-de la variable de entorno “LIBREDTE_RUT”.</p>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>El RUT del contribuyente configurado.</p>
-</dd>
-<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-<dt class="field-even">Muestra<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#libredte.api_client.ApiException" title="libredte.api_client.ApiException"><strong>ApiException</strong></a> – Si el RUT es inválido o no se puede convertir a entero.</p>
+<dd class="field-odd"><p><strong>rut</strong> – RUT del contribuyente a establecer. Si es None, se intentará</p>
 </dd>
 </dl>
+<p>obtener de la variable de entorno “LIBREDTE_RUT”.
+:type rut: int, str, optional
+:return: El RUT del contribuyente configurado.
+:rtype: int
+:raises ApiException: Si el RUT es inválido o no se puede convertir a entero.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="libredte.api_client.ApiClient.set_hash">
 <span class="sig-name descname"><span class="pre">set_hash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hash</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#libredte.api_client.ApiClient.set_hash" title="Link to this definition"></a></dt>
 <dd><p>Configura la autenticación HTTP básica usando un hash proporcionado.</p>
-<p>Este método toma un hash, lo valida (o transforma) en un nombre de usuario mediante
-<cite>__validate_hash</cite> y establece la autenticación HTTP básica para su uso en futuras
-solicitudes HTTP. La contraseña se establece como un valor predeterminado “X”.</p>
+<p>Este método toma un hash, lo valida (o transforma) en un nombre de usuario
+mediante <cite>__validate_hash</cite> y establece la autenticación HTTP básica para
+su uso en futuras solicitudes HTTP. La contraseña se establece como
+un valor predeterminado “X”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>hash</strong> (<em>str</em>) – Un hash que se valida y se usa para configurar el nombre de usuario
-en la autenticación HTTP básica.</p>
+<dd class="field-odd"><p><strong>hash</strong> (<em>str</em>) – Un hash que se valida y se usa para configurar el</p>
 </dd>
 </dl>
+<p>nombre de usuario en la autenticación HTTP básica.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -777,19 +772,20 @@ del servidor. Si se activa, las conexiones HTTP verificarán el certificado SSL
 del servidor; si se desactiva, no lo harán.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ssl_check</strong> (<em>bool</em>) – Indica si se debe verificar el certificado SSL del host. Por defecto es True.</p>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>El estado actualizado de la verificación del SSL.</p>
-</dd>
-<dt class="field-odd">Tipo del valor devuelto<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
+<dd class="field-odd"><p><strong>ssl_check</strong> (<em>bool</em>) – Indica si se debe verificar el certificado SSL del host.</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>Ejemplo de uso:</dt><dd><p>client.set_ssl(False)  # Desactiva la verificación SSL</p>
+<p>Por defecto es True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
+<dd class="field-odd"><p>El estado actualizado de la verificación del SSL.</p>
+</dd>
+<dt class="field-even">Tipo del valor devuelto<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
 </dd>
 </dl>
+<p>Ejemplo de uso:
+client.set_ssl(False)  # Desactiva la verificación SSL</p>
 </dd></dl>
 
 </dd></dl>

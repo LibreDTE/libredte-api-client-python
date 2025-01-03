@@ -97,12 +97,13 @@
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py
 </pre></div>
 </div>
-<p>También es posible ejecutar un archivo de pruebas específico, indicando el archivo a utilizar. Ejemplo:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py<span class="w"> </span>dte_facturacion.test_generar_dte_temporal
+<p>También es posible ejecutar un archivo de pruebas específico, indicando el archivo a utilizar. Ejemplos:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py<span class="w"> </span>dte_facturacion.dte_temp.test_emitir_dte_temp
+python3<span class="w"> </span>tests/run.py<span class="w"> </span>pagos_cobros_masivos.test_buscar_cobro_programado
 </pre></div>
 </div>
 <p>Además puedes elegir una única prueba específica, utilizando la ruta completa:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py<span class="w"> </span>dte_facturacion.test_buscar_documento_emitido.TestBuscarDocumentoEmitido.test_dte_buscar_documento_emitido
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py<span class="w"> </span>dte_facturacion.test_emitir_dte_temp.TestEmitirDteTemp.test_emitir_dte_temp
 </pre></div>
 </div>
 <div class="admonition important">
