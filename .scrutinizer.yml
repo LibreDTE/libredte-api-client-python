@@ -6,8 +6,8 @@ build:
     analysis:
       tests:
         override:
-          - python-scrutinizer-run
-          - command: make tests_dte_temp
+          - py-scrutinizer-run
+          - command: make tests-readonly
             coverage:
               file: var/tests-coverage.xml
               format: clover

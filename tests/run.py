@@ -35,9 +35,8 @@ class CustomTestResult(unittest.TextTestResult):
         if exception_type is AssertionError:
             self.stream.writeln(f"\nFAIL: {test.id()}")
             self.stream.writeln(f"Assertion Error: {value}")
-        else:
-            # Manejo estándar para otros errores
-            super().addFailure(test, err)
+        # Manejo estándar para otros errores
+        super().addFailure(test, err)
 
 # Directorio de tests
 tests_dir = os.path.dirname(os.path.abspath(__file__))
