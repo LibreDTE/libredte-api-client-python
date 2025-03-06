@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Configuración &mdash; documentación de LibreDTE: Cliente de API en Python - 4</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
@@ -95,7 +95,7 @@ la cual será reconocida automáticamente por el cliente:</p>
 </div>
 <p>Si no se desea usar una variable de entorno, al instanciar los objetos se
 deberá indicar el hash del usuario. Ejemplo:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">libredte</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">libredte</span>
 <span class="n">LIBREDTE_HASH</span><span class="o">=</span><span class="s2">&quot;aquí-tu-hash-de-usuario&quot;</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">libredte</span><span class="o">.</span><span class="n">api_client</span><span class="o">.</span><span class="n">ApiClient</span><span class="p">(</span><span class="n">LIBREDTE_HASH</span><span class="p">)</span>
 </pre></div>
@@ -107,7 +107,7 @@ de tu servidor. Ejemplo:</p>
 </div>
 <p>Y si deseas hacerlo sin la variable de entorno, debes pasar la URL como
 segundo parámetro en el constructor del cliente:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">libredte</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">libredte</span>
 <span class="n">LIBREDTE_HASH</span><span class="o">=</span><span class="s2">&quot;aquí-tu-hash-de-usuario&quot;</span>
 <span class="n">LIBREDTE_URL</span><span class="o">=</span><span class="s2">&quot;https://libredte.example.com&quot;</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">libredte</span><span class="o">.</span><span class="n">api_client</span><span class="o">.</span><span class="n">ApiClient</span><span class="p">(</span><span class="n">LIBREDTE_HASH</span><span class="p">,</span> <span class="n">LIBREDTE_URL</span><span class="p">)</span>
