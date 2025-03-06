@@ -33,7 +33,7 @@ tests-readonly:
 	python3 tests/run.py dte_facturacion.dte_temp.test_descargar_xml_dte_temp.TestDescargarXmlDteTemp
 	python3 tests/run.py dte_facturacion.dte_temp.test_emitir_dte_temp.TestEmitirDteTemp
 	python3 tests/run.py dte_facturacion.dte_temp.test_eliminar_dte_temp.TestEliminarDteTemp
-	python3 tests/run.py dte_facturacion.dte_temp.test_listar_dte_temp.TestListarDteTemp
+	python3 tests/run.py dte_facturacion.dte_temp.test_listar_dtes_temp.TestListarDtesTemp
 	python3 tests/run.py pagos_cobros_masivos.test_buscar_cobro_programado.TestBuscarCobroProgramado
 	python3 tests/run.py pagos_cobros_masivos.test_listar_cobros_masivos_programados.TestListarCobrosMasivosProgramados
 
