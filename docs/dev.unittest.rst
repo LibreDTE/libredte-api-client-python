@@ -20,17 +20,18 @@ Para ejecutar todas las pruebas, utilizar el siguiente comando:
 
     python3 tests/run.py
 
-También es posible ejecutar un archivo de pruebas específico, indicando el archivo a utilizar. Ejemplo:
+También es posible ejecutar un archivo de pruebas específico, indicando el archivo a utilizar. Ejemplos:
 
 .. code:: shell
 
-    python3 tests/run.py dte_facturacion.test_generar_dte_temporal
+    python3 tests/run.py dte_facturacion.dte_temp.test_emitir_dte_temp
+    python3 tests/run.py pagos_cobros_masivos.test_buscar_cobro_programado
 
 Además puedes elegir una única prueba específica, utilizando la ruta completa:
 
 .. code:: shell
 
-    python3 tests/run.py dte_facturacion.test_buscar_documento_emitido.TestBuscarDocumentoEmitido.test_dte_buscar_documento_emitido
+    python3 tests/run.py dte_facturacion.test_emitir_dte_temp.TestEmitirDteTemp.test_emitir_dte_temp
 
 .. important::
     Para el ejemplo anterior, se necesita tener al menos 1 DTE emitido.

@@ -29,8 +29,9 @@ class ApiClient:
     """
     Cliente API para integrarse con LibreDTE.
 
-    Esta clase proporciona funcionalidades para interactuar con los servicios web de LibreDTE,
-    permitiendo realizar operaciones GET y POST, y crear enlaces a recursos de LibreDTE.
+    Esta clase proporciona funcionalidades para interactuar con los servicios
+    web de LibreDTE, permitiendo realizar operaciones GET y POST, y crear
+    enlaces a recursos de LibreDTE.
 
     :param str url: URL base del servicio de LibreDTE.
     :param requests.auth.HTTPBasicAuth http_auth: Autenticación para las solicitudes HTTP.
@@ -46,12 +47,18 @@ class ApiClient:
 
     def __init__(self, hash=None, url=None, version=None, raise_for_status=True):
         """
-        Inicializa el cliente API con la configuración necesaria para realizar las solicitudes.
+        Inicializa el cliente API con la configuración necesaria para realizar
+        las solicitudes.
 
-        :param str hash: Hash de autenticación del usuario. Si es None, se intentará obtener de la variable de entorno LIBREDTE_HASH.
-        :param str url: URL base del servicio de LibreDTE. Si es None, se intentará obtener de la variable de entorno LIBREDTE_URL o se usará la URL por defecto.
-        :param str version: Versión de la API a utilizar. Por defecto, se usa una versión predefinida.
-        :param bool raise_for_status: Si se debe lanzar una excepción automáticamente para respuestas de error HTTP. Por defecto es True.
+        :param str hash: Hash de autenticación del usuario. Si es None, se
+        intentará obtener de la variable de entorno LIBREDTE_HASH.
+        :param str url: URL base del servicio de LibreDTE. Si es None, se
+        intentará obtener de la variable de entorno LIBREDTE_URL o se usará
+        la URL por defecto.
+        :param str version: Versión de la API a utilizar. Por defecto, se
+        usa una versión predefinida.
+        :param bool raise_for_status: Si se debe lanzar una excepción automáticamente
+        para respuestas de error HTTP. Por defecto es True.
         :raises ApiException: Si el hash del usuario no es válido o está ausente.
         """
         self.set_hash(hash)
@@ -112,13 +119,14 @@ class ApiClient:
         del servidor. Si se activa, las conexiones HTTP verificarán el certificado SSL
         del servidor; si se desactiva, no lo harán.
 
-        :param bool ssl_check: Indica si se debe verificar el certificado SSL del host. Por defecto es True.
+        :param bool ssl_check: Indica si se debe verificar el certificado SSL del host.
+        Por defecto es True.
 
         :return: El estado actualizado de la verificación del SSL.
         :rtype: bool
 
         Ejemplo de uso:
-            client.set_ssl(False)  # Desactiva la verificación SSL
+        client.set_ssl(False)  # Desactiva la verificación SSL
         """
         self.ssl_check = ssl_check
         return self.ssl_check
@@ -127,12 +135,13 @@ class ApiClient:
         """
         Establece el RUT del contribuyente para las solicitudes de la API.
 
-        Este método permite configurar el RUT del contribuyente que se utilizará en las
-        solicitudes subsiguientes. Si se proporciona un RUT, este se utiliza; de lo contrario,
-        se intenta obtener de la variable de entorno 'LIBREDTE_RUT'.
+        Este método permite configurar el RUT del contribuyente que se utilizará
+        en las solicitudes subsiguientes. Si se proporciona un RUT, este se
+        utiliza; de lo contrario, se intenta obtener de la variable de
+        entorno 'LIBREDTE_RUT'.
 
-        :param rut: RUT del contribuyente a establecer. Si es None, se intentará obtener
-                    de la variable de entorno 'LIBREDTE_RUT'.
+        :param rut: RUT del contribuyente a establecer. Si es None, se intentará
+        obtener de la variable de entorno 'LIBREDTE_RUT'.
         :type rut: int, str, optional
         :return: El RUT del contribuyente configurado.
         :rtype: int
@@ -145,7 +154,9 @@ class ApiClient:
             try:
                 rut = int(rut)
             except ValueError:
-                raise ApiException(f'Valor de RUT inválido: {rut}')
+                raise ApiException('Valor de RUT inválido: %(rut)s' % {
+                    'rut': rut
+                })
         self.rut = rut
         return self.rut
 
@@ -153,12 +164,13 @@ class ApiClient:
         """
         Configura la autenticación HTTP básica usando un hash proporcionado.
 
-        Este método toma un hash, lo valida (o transforma) en un nombre de usuario mediante
-        `__validate_hash` y establece la autenticación HTTP básica para su uso en futuras
-        solicitudes HTTP. La contraseña se establece como un valor predeterminado 'X'.
+        Este método toma un hash, lo valida (o transforma) en un nombre de usuario
+        mediante `__validate_hash` y establece la autenticación HTTP básica para
+        su uso en futuras solicitudes HTTP. La contraseña se establece como
+        un valor predeterminado 'X'.
 
-        :param str hash: Un hash que se valida y se usa para configurar el nombre de usuario
-                         en la autenticación HTTP básica.
+        :param str hash: Un hash que se valida y se usa para configurar el
+        nombre de usuario en la autenticación HTTP básica.
         """
         username = self.__validate_hash(hash)
         password = 'X'
@@ -166,15 +178,18 @@ class ApiClient:
 
     def set_ambiente_sii(self, ambiente=None):
         """
-        Establece el ambiente del Servicio de Impuestos Internos (SII) para las solicitudes de la API.
+        Establece el ambiente del Servicio de Impuestos Internos (SII) para
+        las solicitudes de la API.
 
-        Este método permite configurar el ambiente (producción o pruebas) que se utilizará en las
-        solicitudes subsiguientes. El ambiente se puede especificar directamente o ser obtenido
-        de la variable de entorno 'LIBREDTE_AMBIENTE'. Los valores válidos son identificadores
-        para producción ('0', 'produccion', 'prod', 'palena') y pruebas ('1', 'pruebas', 'test', 'maullin').
+        Este método permite configurar el ambiente (producción o pruebas) que
+        se utilizará en las solicitudes subsiguientes. El ambiente se puede
+        especificar directamente o ser obtenido de la variable de entorno
+        'LIBREDTE_AMBIENTE'. Los valores válidos son identificadores para
+        producción ('0', 'produccion', 'prod', 'palena') y pruebas ('1',
+        'pruebas', 'test', 'maullin').
 
-        :param str ambiente: Identificador del ambiente a establecer. Si es None, se intentará obtener
-                             de la variable de entorno 'LIBREDTE_AMBIENTE'.
+        :param str ambiente: Identificador del ambiente a establecer. Si es None,
+        se intentará obtener de la variable de entorno 'LIBREDTE_AMBIENTE'.
         :return: El ambiente del SII configurado.
         :rtype: str
         :raises ApiException: Si el valor proporcionado para el ambiente es inválido.
@@ -189,7 +204,9 @@ class ApiClient:
             elif ambiente in ('1', 'pruebas',  'test', 'maullin'):
                 ambiente = self.AMBIENTE_SII_PRUEBAS
             else:
-                raise ApiException(f'Valor de Ambiente SII inválido: {ambiente}')
+                raise ApiException('Valor de Ambiente SII inválido: %(ambiente)s' % {
+                    'ambiente': ambiente
+                })
         self.ambiente_sii = ambiente
         return self.ambiente_sii
 
@@ -198,10 +215,12 @@ class ApiClient:
         Realiza una solicitud GET a un recurso de la API de LibreDTE.
 
         :param str resource: Recurso de la API que se desea consumir.
-        :param dict headers: Cabeceras adicionales para la solicitud. Si es None, se usarán las cabeceras por defecto.
+        :param dict headers: Cabeceras adicionales para la solicitud. Si es
+        None, se usarán las cabeceras por defecto.
         :return: Objeto de respuesta de la solicitud HTTP.
         :rtype: requests.Response
-        :raises ApiException: Lanza una excepción si ocurre un error en la solicitud HTTP, como errores de conexión, timeout o HTTP.
+        :raises ApiException: Lanza una excepción si ocurre un error en la
+        solicitud HTTP, como errores de conexión, timeout o HTTP.
         """
         return self.__request('GET', resource, headers=headers)
 
@@ -210,11 +229,14 @@ class ApiClient:
         Realiza una solicitud POST a un recurso de la API de LibreDTE.
 
         :param str resource: Recurso de la API que se desea consumir.
-        :param dict, str data: Datos que se enviarán con la solicitud. Si es un diccionario, se codificará como JSON.
-        :param dict headers: Cabeceras adicionales para la solicitud. Si es None, se usarán las cabeceras por defecto.
+        :param dict, str data: Datos que se enviarán con la solicitud. Si es
+        un diccionario, se codificará como JSON.
+        :param dict headers: Cabeceras adicionales para la solicitud. Si es
+        None, se usarán las cabeceras por defecto.
         :return: Objeto de respuesta de la solicitud HTTP.
         :rtype: requests.Response
-        :raises ApiException: Lanza una excepción si ocurre un error en la solicitud HTTP, como errores de conexión, timeout o HTTP.
+        :raises ApiException: Lanza una excepción si ocurre un error en la
+        solicitud HTTP, como errores de conexión, timeout o HTTP.
         """
         return self.__request('POST', resource, data, headers)
 
@@ -228,9 +250,9 @@ class ApiClient:
         :param dict headers: Cabeceras adicionales para la solicitud (opcional).
         :return: Respuesta de la solicitud.
         :rtype: requests.Response
-        :raises ApiException: Si el método HTTP no es soportado o si hay un error de conexión.
+        :raises ApiException: Si el método HTTP no es soportado o si hay un
+        error de conexión.
         """
-        #api_path = f'/api/{resource}'
         api_path = "/api/%(resource)s" % {'resource' : resource}
         full_url = urllib.parse.urljoin(self.url + '/', api_path.lstrip('/'))
         extra_params = {'_version': self.version}
@@ -245,26 +267,34 @@ class ApiClient:
             try:
                 data = json.dumps(data)
             except TypeError as e:
-                raise ApiException(f'Error al codificar los datos en JSON: {e}')
+                raise ApiException(
+                    'Error al codificar los datos en JSON: %(e)s' % {'e': e})
         try:
             response = requests.request(
                 method, full_url, data=data, headers=headers, auth=self.http_auth, verify=self.ssl_check
             )
             return self.__check_and_return_response(response)
         except requests.exceptions.ConnectionError as error:
-            raise ApiException(f'Error de conexión: {error}')
+            raise ApiException('Error de conexión: %(error)s' % {
+                'error', error
+            })
         except requests.exceptions.Timeout as error:
-            raise ApiException(f'Error de timeout: {error}')
+            raise ApiException('Error de timeout: %(error)s' % {
+                'error', error
+            })
         except requests.exceptions.RequestException as error:
-            raise ApiException(f'Error en la solicitud: {error}')
+            raise ApiException('Error en la solicitud: %(error)s' % {
+                'error', error
+            })
 
     def __add_parameters_to_url(self, url, params):
         """
         Añade o actualiza parámetros en la URL dada.
 
-        Esta función toma una URL y un diccionario de parámetros, y devuelve una nueva URL
-        con los parámetros añadidos o actualizados. Si un parámetro ya existe en la URL,
-        su valor se actualizará; si no existe, el parámetro se añadirá.
+        Esta función toma una URL y un diccionario de parámetros, y devuelve una
+        nueva URL con los parámetros añadidos o actualizados. Si un parámetro
+        ya existe en la URL, su valor se actualizará; si no existe, el
+        parámetro se añadirá.
 
         :param str url: La URL original a la que se añadirán los parámetros.
         :param dict params: Un diccionario de parámetros y valores para añadir a la URL.
@@ -284,7 +314,14 @@ class ApiClient:
 
         # Reconstruir la URL completa
         new_url = urlunparse(
-            (parsed_url.scheme, parsed_url.netloc, parsed_url.path, parsed_url.params, new_query_string, parsed_url.fragment)
+            (
+                parsed_url.scheme,
+                parsed_url.netloc,
+                parsed_url.path,
+                parsed_url.params,
+                new_query_string,
+                parsed_url.fragment
+            )
         )
 
         return new_url
@@ -308,7 +345,9 @@ class ApiClient:
                         'message', 'Error desconocido.'
                     )
                 except json.decoder.JSONDecodeError:
-                    error_message = f'Error al decodificar los datos en JSON: {error.response.text}'
+                    error_message = 'Error al decodificar los datos en JSON: %(error)s' % {
+                        'error' : error.response.text
+                    }
                 raise ApiException(error_message, response.status_code)
         return response
 
@@ -317,7 +356,8 @@ class ApiClient:
         Crea un enlace que apunta a un recurso específico en la plataforma de LibreDTE.
 
         :param str resource: Recurso al que se desea acceder en la plataforma de LibreDTE.
-        :param int rut: RUT del contribuyente en LibreDTE con el que se quiere usar el recurso. Si es None, se usará el RUT almacenado en la clase.
+        :param int rut: RUT del contribuyente en LibreDTE con el que se quiere
+        usar el recurso. Si es None, se usará el RUT almacenado en la clase.
         :return: URL formada para acceder al recurso especificado.
         :rtype: str
         """
@@ -327,7 +367,9 @@ class ApiClient:
                 raise ValueError()
             rut = int(rut)
         except ValueError:
-            raise ApiException(f'Valor de RUT inválido: {rut}')
+            raise ApiException('Valor de RUT inválido: %(rut)s' % {
+                'rut' : rut
+            })
         if resource:
             resource_base64 = base64.b64encode(resource.encode('utf-8')).decode('utf-8')
             link = "%(url)s/dte/contribuyentes/seleccionar/%(rut)s/%(resource_base64)s" % {
@@ -359,9 +401,10 @@ class ApiException(Exception):
 
     def __str__(self):
         """
-        Devuelve una representación en cadena del error, proporcionando un contexto claro
-        del problema ocurrido. Esta representación incluye el prefijo "[LibreDTE]",
-        seguido del código de error si está presente, y el mensaje de error.
+        Devuelve una representación en cadena del error, proporcionando un
+        contexto claro del problema ocurrido. Esta representación incluye el
+        prefijo "[LibreDTE]", seguido del código de error si está presente,
+        y el mensaje de error.
 
         Si se especifica un código de error, el formato será:
         "[LibreDTE] Error {code}: {message}"
@@ -383,10 +426,15 @@ class ApiBase(ABC):
     """
     Clase base para las clases que consumen la API (wrappers).
 
-    :param str api_hash: Hash de autenticación del usuario. Si es None, se intentará obtener de la variable de entorno LIBREDTE_HASH.
-    :param str api_url: URL base del servicio de LibreDTE. Si es None, se intentará obtener de la variable de entorno LIBREDTE_URL o se usará la URL por defecto.
-    :param str api_version: Versión de la API a utilizar. Por defecto, se usa una versión predefinida.
-    :param bool api_raise_for_status: Si se debe lanzar una excepción automáticamente para respuestas de error HTTP. Por defecto es True.
+    :param str api_hash: Hash de autenticación del usuario. Si es None, se
+    intentará obtener de la variable de entorno LIBREDTE_HASH.
+    :param str api_url: URL base del servicio de LibreDTE. Si es None, se
+    intentará obtener de la variable de entorno LIBREDTE_URL o se usará
+    la URL por defecto.
+    :param str api_version: Versión de la API a utilizar. Por defecto, se usa
+    una versión predefinida.
+    :param bool api_raise_for_status: Si se debe lanzar una excepción automáticamente
+    para respuestas de error HTTP. Por defecto es True.
     :param dict kwargs: Argumentos adicionales para la autenticación.
     """
 

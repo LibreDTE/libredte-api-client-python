@@ -35,18 +35,15 @@ class CustomTestResult(unittest.TextTestResult):
         if exception_type is AssertionError:
             self.stream.writeln(f"\nFAIL: {test.id()}")
             self.stream.writeln(f"Assertion Error: {value}")
-        else:
-            # Manejo estándar para otros errores
-            super().addFailure(test, err)
+        # Manejo estándar para otros errores
+        super().addFailure(test, err)
 
 # Directorio de tests
 tests_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Cargar variables de entorno para los tests
-if not load_dotenv(os.path.join(tests_dir, 'test.env'), override=True):
-    print("\n[Error] No fue posible cargar las variables de entorno para los tests.")
-    print(f"Corroborar que exista el archivo {tests_dir}/test.env y posea las variables definidas.\n")
-    sys.exit()
+if os.path.exists(os.path.join(tests_dir, 'test.env')):
+    load_dotenv(os.path.join(tests_dir, 'test.env'), override=True)
 
 # Determinar si se pidió un test específico o se ejecutan todos
 parser = argparse.ArgumentParser(description='Ejecución de los casos de prueba')

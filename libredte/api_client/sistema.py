@@ -31,13 +31,17 @@ class Moneda(ApiBase):
         """
         Obtiene la tasa de cambio de moneda de USD a otra moneda en una fecha específica.
 
-        Este método realiza una solicitud GET para obtener la tasa de cambio desde USD
-        hacia la moneda especificada por el usuario para una fecha dada. Es útil para
-        consultas de conversiones de moneda históricas o actuales.
+        Este método realiza una solicitud GET para obtener la tasa de cambio desde
+        USD hacia la moneda especificada por el usuario para una fecha dada. Es
+        útil para consultas de conversiones de moneda históricas o actuales.
 
         :param str to: Código de la moneda destino a la cual se desea convertir USD.
         :param str day: Fecha de la consulta de la tasa de cambio.
-        :return: Respuesta JSON con la tasa de cambio desde USD a la moneda especificada en la fecha indicada.
+        :return: Respuesta JSON con la tasa de cambio desde USD a la moneda
+        especificada en la fecha indicada.
         """
-        url = "/sistema/general/moneda_cambios/tasa/USD/%(to)s/%(day)s" % {'to' : to, 'day' : day}
+        url = "/sistema/general/moneda_cambios/tasa/USD/%(to)s/%(day)s" % {
+            'to' : to,
+            'day' : day
+        }
         return self.client.get(url)
