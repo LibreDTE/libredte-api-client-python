@@ -7,7 +7,7 @@ Ejemplo de Generar un DTE temporal
 Antes de probar, integrar y/o utilizar el cliente de API, necesitas haber definido previamente las variables de entorno.
 
 .. seealso::
-    Para más información sobre este paso, referirse al la guía en `Configuración <gettingstarted.setup>`_.
+    Para más información sobre este paso, referirse a la guía en :doc:`gettingstarted.setup`.
 
 El siguiente es un ejemplo básico de cómo emitir un DTE usando el cliente de API de LibreDTE:
 
@@ -70,7 +70,8 @@ El siguiente es un ejemplo básico de cómo emitir un DTE usando el cliente de A
 
     # Se genera un DTE real utilizando datos del DTE temporal recientemente
     # generado.
-    dte_real = dte.emitir_dte_real(dte_temporal)
+    response = dte.emitir_dte_real(dte_temporal)
+    dte_real = response.json()
     print('\nGENERAR DTE REAL', json.dumps(dte_real),'\n')
 
 .. seealso::

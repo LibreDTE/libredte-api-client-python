@@ -1,22 +1,24 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="es" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Configuración &mdash; documentación de LibreDTE: Cliente de API en Python - 4</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+  <title>Configuración &mdash; documentación de LibreDTE: Cliente de API en Python - 5.0.0</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=ca3dc111"></script>
-      <script src="_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="_static/translations.js?v=f85f4cfb"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=75e65aee"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=efdbd0b9"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Índice" href="genindex.html" />
     <link rel="search" title="Búsqueda" href="search.html" />
@@ -35,6 +37,9 @@
           <a href="index.html" class="icon icon-home">
             LibreDTE: Cliente de API en Python
           </a>
+              <div class="version">
+                5.0
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
@@ -95,7 +100,7 @@ la cual será reconocida automáticamente por el cliente:</p>
 </div>
 <p>Si no se desea usar una variable de entorno, al instanciar los objetos se
 deberá indicar el hash del usuario. Ejemplo:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">libredte</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">libredte</span>
 <span class="n">LIBREDTE_HASH</span><span class="o">=</span><span class="s2">&quot;aquí-tu-hash-de-usuario&quot;</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">libredte</span><span class="o">.</span><span class="n">api_client</span><span class="o">.</span><span class="n">ApiClient</span><span class="p">(</span><span class="n">LIBREDTE_HASH</span><span class="p">)</span>
 </pre></div>
@@ -107,12 +112,56 @@ de tu servidor. Ejemplo:</p>
 </div>
 <p>Y si deseas hacerlo sin la variable de entorno, debes pasar la URL como
 segundo parámetro en el constructor del cliente:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">libredte</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">libredte</span>
 <span class="n">LIBREDTE_HASH</span><span class="o">=</span><span class="s2">&quot;aquí-tu-hash-de-usuario&quot;</span>
 <span class="n">LIBREDTE_URL</span><span class="o">=</span><span class="s2">&quot;https://libredte.example.com&quot;</span>
 <span class="n">client</span> <span class="o">=</span> <span class="n">libredte</span><span class="o">.</span><span class="n">api_client</span><span class="o">.</span><span class="n">ApiClient</span><span class="p">(</span><span class="n">LIBREDTE_HASH</span><span class="p">,</span> <span class="n">LIBREDTE_URL</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>La URL debe usar HTTPS: con <code class="docutils literal notranslate"><span class="pre">http://</span></code> el hash del usuario viaja sin
+cifrar, y el cliente emite un aviso (excepto para <code class="docutils literal notranslate"><span class="pre">localhost</span></code>). Si el
+servidor responde con una redirección (por ejemplo, de <code class="docutils literal notranslate"><span class="pre">http://</span></code> a
+<code class="docutils literal notranslate"><span class="pre">https://</span></code>), el cliente no la sigue y lanza <code class="docutils literal notranslate"><span class="pre">ApiException</span></code> indicando
+la URL a la que redirige: configure esa URL.</p>
+</div>
+</section>
+<section id="contribuyente-y-ambiente-del-sii">
+<h2>Contribuyente y ambiente del SII<a class="headerlink" href="#contribuyente-y-ambiente-del-sii" title="Link to this heading"></a></h2>
+<p>El cliente también reconoce automáticamente el RUT del contribuyente con el
+que se opera y el ambiente del SII (producción o pruebas), que se envían en
+cada solicitud a la API:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LIBREDTE_RUT</span><span class="o">=</span><span class="s2">&quot;76192083-9&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">LIBREDTE_AMBIENTE</span><span class="o">=</span><span class="s2">&quot;pruebas&quot;</span>
+</pre></div>
+</div>
+<p>El RUT se puede indicar con o sin dígito verificador. Los valores válidos para
+el ambiente son <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">produccion</span></code>, <code class="docutils literal notranslate"><span class="pre">prod</span></code> o <code class="docutils literal notranslate"><span class="pre">palena</span></code> para producción, y
+<code class="docutils literal notranslate"><span class="pre">1</span></code>, <code class="docutils literal notranslate"><span class="pre">pruebas</span></code>, <code class="docutils literal notranslate"><span class="pre">test</span></code> o <code class="docutils literal notranslate"><span class="pre">maullin</span></code> para pruebas, sin distinguir
+mayúsculas.</p>
+<p>También se pueden configurar sin variables de entorno, con los métodos del
+cliente:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">set_contribuyente</span><span class="p">(</span><span class="s1">&#39;76192083-9&#39;</span><span class="p">)</span>
+<span class="n">client</span><span class="o">.</span><span class="n">set_ambiente_sii</span><span class="p">(</span><span class="n">client</span><span class="o">.</span><span class="n">AMBIENTE_SII_PRUEBAS</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tiempo-de-espera">
+<h2>Tiempo de espera<a class="headerlink" href="#tiempo-de-espera" title="Link to this heading"></a></h2>
+<p>Las solicitudes esperan como máximo 10 segundos para conectar y 300
+segundos para recibir la respuesta. Se puede cambiar al crear el cliente,
+o con <code class="docutils literal notranslate"><span class="pre">api_timeout</span></code> en las clases de la API (<code class="docutils literal notranslate"><span class="pre">Dte</span></code>, <code class="docutils literal notranslate"><span class="pre">Cobros</span></code>, etc.):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">libredte.api_client.dte</span> <span class="kn">import</span> <span class="n">Dte</span>
+<span class="n">dte</span> <span class="o">=</span> <span class="n">Dte</span><span class="p">(</span><span class="n">api_timeout</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">60</span><span class="p">))</span>  <span class="c1"># 5 s para conectar, 60 s de respuesta</span>
+<span class="n">dte</span> <span class="o">=</span> <span class="n">Dte</span><span class="p">(</span><span class="n">api_timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>     <span class="c1"># sin límite de espera</span>
+</pre></div>
+</div>
+<p>Si se supera el tiempo, se lanza <code class="docutils literal notranslate"><span class="pre">ApiException</span></code> con el mensaje
+«Error de timeout».</p>
+<p>Si no logra conectarse al servidor, el cliente reintenta hasta 3 veces
+(esperando 0, 1 y 2 segundos). Una solicitud que llegó al servidor no se
+reintenta, ya que operaciones como emitir un DTE no se deben repetir.</p>
 </section>
 </section>
 
@@ -127,7 +176,7 @@ segundo parámetro en el constructor del cliente:</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Derechos de autor 2024, LibreDTE.</p>
+    <p>&#169; Derechos de autor 2024-2026, LibreDTE.</p>
   </div>
 
   Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un

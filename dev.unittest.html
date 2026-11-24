@@ -1,22 +1,24 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="es" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pruebas unitarias &mdash; documentación de LibreDTE: Cliente de API en Python - 4</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+  <title>Pruebas unitarias &mdash; documentación de LibreDTE: Cliente de API en Python - 5.0.0</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
   
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=ca3dc111"></script>
-      <script src="_static/doctools.js?v=fd6eb6e6"></script>
-      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-      <script src="_static/translations.js?v=f85f4cfb"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=75e65aee"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=efdbd0b9"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Índice" href="genindex.html" />
     <link rel="search" title="Búsqueda" href="search.html" />
@@ -35,6 +37,9 @@
           <a href="index.html" class="icon icon-home">
             LibreDTE: Cliente de API en Python
           </a>
+              <div class="version">
+                5.0
+              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
@@ -92,8 +97,27 @@
 <span class="nv">LIBREDTE_RUT</span><span class="o">=</span><span class="s2">&quot;66666666-6&quot;</span>
 </pre></div>
 </div>
-<p>Para ejecutar las pruebas unitarias se necesita tener instaladas las dependencias del archivo requirements.txt.</p>
+<p>Para ejecutar las pruebas unitarias se necesita el entorno de desarrollo, con
+Python 3.14 o superior, la biblioteca y las dependencias de desarrollo
+(grupo <code class="docutils literal notranslate"><span class="pre">dev</span></code> de <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>). El entorno se crea en la carpeta
+<code class="docutils literal notranslate"><span class="pre">venv</span></code> con:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>install-dev
+</pre></div>
+</div>
 <p>Para ejecutar todas las pruebas, utilizar el siguiente comando:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>tests
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Advertencia</p>
+<p>Las pruebas usan la API real con el contribuyente configurado: emiten
+DTE temporales y reales (en el ambiente de pruebas del SII), pagan cobros
+y envían correos. Los DTE temporales que emiten se eliminan al terminar
+cada prueba. Para ejecutar solo el conjunto que usa el CI, que no emite
+DTE reales, ni paga cobros, ni envía correos, utilizar
+<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">tests-readonly</span></code>.</p>
+</div>
+<p>O, con el entorno activado (<code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">venv/bin/activate</span></code>):</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py
 </pre></div>
 </div>
@@ -103,13 +127,33 @@ python3<span class="w"> </span>tests/run.py<span class="w"> </span>pagos_cobros_
 </pre></div>
 </div>
 <p>Además puedes elegir una única prueba específica, utilizando la ruta completa:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py<span class="w"> </span>dte_facturacion.test_emitir_dte_temp.TestEmitirDteTemp.test_emitir_dte_temp
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py<span class="w"> </span>dte_facturacion.dte_temp.test_emitir_dte_temp.TestEmitirDteTemp.test_emitir_dte_temp
 </pre></div>
 </div>
 <div class="admonition important">
 <p class="admonition-title">Importante</p>
-<p>Para el ejemplo anterior, se necesita tener al menos 1 DTE emitido.</p>
+<p>Las pruebas de <code class="docutils literal notranslate"><span class="pre">dte_facturacion.dte_real</span></code> usan el DTE emitido más
+reciente de los últimos 30 días, y las de
+<code class="docutils literal notranslate"><span class="pre">dte_facturacion.dte_recibidos</span></code> el DTE recibido más reciente. Si no hay,
+esas pruebas se saltan (aparecen como <em>skipped</em>). Las que envían correos
+se saltan si no está configurada la variable de entorno <code class="docutils literal notranslate"><span class="pre">TEST_EMAIL</span></code>.</p>
 </div>
+<p>Las pruebas de <code class="docutils literal notranslate"><span class="pre">api_client</span></code> no usan la API real ni requieren las variables
+de entorno: simulan las respuestas de la API o usan un servidor local:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>tests/run.py<span class="w"> </span>api_client.test_configuracion
+python3<span class="w"> </span>tests/run.py<span class="w"> </span>api_client.test_conexion
+python3<span class="w"> </span>tests/run.py<span class="w"> </span>api_client.test_manejo_errores
+python3<span class="w"> </span>tests/run.py<span class="w"> </span>api_client.test_url
+</pre></div>
+</div>
+<section id="revision-de-codigo">
+<h2>Revisión de código<a class="headerlink" href="#revision-de-codigo" title="Link to this heading"></a></h2>
+<p>Antes de enviar cambios, el código debe pasar el linter (Ruff) y los
+chequeos de tipos en modo estricto (MyPy y Pyright):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>check
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -123,7 +167,7 @@ python3<span class="w"> </span>tests/run.py<span class="w"> </span>pagos_cobros_
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Derechos de autor 2024, LibreDTE.</p>
+    <p>&#169; Derechos de autor 2024-2026, LibreDTE.</p>
   </div>
 
   Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
