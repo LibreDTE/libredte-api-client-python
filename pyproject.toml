@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "libredte"
 
 # Versions should comply with PEP440
-version = "5.0.0"
+version = "5.0.1"
 
 description = "Cliente para realizar la integración con los servicios web de LibreDTE desde Python."
 readme = "README.rst"
@@ -29,13 +29,15 @@ classifiers = [
   "Typing :: Typed",
 ]
 
-# Run-time dependencies, installed with the package
+# Run-time dependencies, installed with the package. Only the packages that
+# libredte imports, with minimum versions (not exact ones), so the projects
+# that use it can keep their own versions. certifi, idna and
+# charset-normalizer come with requests.
+# - requests 2.32.4 fixes CVE-2024-47081 (credentials leaked through .netrc).
+# - urllib3: Retry (used in ApiClient) with the options of version 2.
 dependencies = [
-  "certifi==2024.7.4",
-  "charset-normalizer==3.3.2",
-  "idna==3.7",
-  "requests==2.32.4",
-  "urllib3==2.6.3",
+  "requests>=2.32.4",
+  "urllib3>=2.0",
 ]
 
 [project.urls]
