@@ -1,0 +1,18 @@
+# Actualizaciones automáticas de dependencias (Dependabot)
+# https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+
+version: 2
+
+updates:
+  # Versiones fijadas en pyproject.toml: dependencias del paquete
+  # ([project] dependencies) y de desarrollo (grupo dev)
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+
+  # Versiones de las actions usadas en .github/workflows
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

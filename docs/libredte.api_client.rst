@@ -28,6 +28,14 @@ libredte.api\_client.dte module
    :undoc-members:
    :show-inheritance:
 
+libredte.api\_client.sistema module
+-----------------------------------
+
+.. automodule:: libredte.api_client.sistema
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

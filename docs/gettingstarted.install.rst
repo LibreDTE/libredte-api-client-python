@@ -1,6 +1,10 @@
 Instalación y actualización
 ===========================
 
+.. important::
+  Desde la versión 5 la biblioteca requiere Python 3.14 o superior. Con una
+  versión anterior de Python, PIP instalará la última versión 4.
+
 Instalar usando un entorno virtual y PIP con:
 
 .. code:: shell

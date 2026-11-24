@@ -17,57 +17,32 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
-from libredte.api_client import ApiClient, ApiException
+"""Pruebas de la actualización del estado de un DTE real."""
 
-from os import getenv
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
+from tests.respuestas import leer_objeto
 
-import json
 
 class TestActualizarEstadoDteReal(AbstractDteFacturacion):
-    """
-    Clase de pruebas para actualizar el estado de un DTE emitido (real).
-    """
 
-    @classmethod
-    def setUpClass(cls):
-        """
-        Método para inicialización de variables y clases a utilizar.
-        """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(ApiClient.AMBIENTE_SII_PRUEBAS)
+    """Clase de pruebas para actualizar el estado de un DTE emitido (real)."""
 
-    def test_actualizar_estado_dte_real(self):
+    def test_actualizar_estado_dte_real(self) -> None:
         """
-        Método de test para actualizar el estado de un DTE.
-        """
-        try:
-            # Se llama al método del abstract para listar DTEs reales.
-            documentos = self._listar_dtes_reales(self.contribuyente_rut)
-            # Se convierte en diccionario el resultado de la búsqueda.
-            documentos_dict = documentos.json()
+        La actualización entrega el estado de revisión del DTE en el SII.
 
-            # Filtros a utilizar.
-            filtros = {
-                'usarWebservice': 1
-            }
-            # Se intenta actualizar el estado del DTE real.
-            response = self.dte.dte_emitidos_actualizar_estado(
-                documentos_dict[0]['dte'],
-                documentos_dict[0]['folio'],
+        IMPORTANTE: El DTE debe haber sido enviado al SII (tener Track ID).
+        """
+        documento = self._primer_dte_emitido()
+        estado = leer_objeto(
+            self.dte.dte_emitidos_actualizar_estado(
+                documento['dte'],
+                documento['folio'],
                 self.contribuyente_rut,
-                filter = filtros
-            )
-            # Se asegura que el codigo sea 200.
-            self.assertEqual(response.status_code, 200)
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_actualizar_estado_dte_real() estado: ',
-                    json.dumps(response.json())
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception o si el código no es 200.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+                filtros={'usarWebservice': 1},
+            ),
+        )
+        self.assertIn('revision_estado', estado)
+        self._mostrar('estado', estado)

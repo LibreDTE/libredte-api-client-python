@@ -17,89 +17,72 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
-from libredte.api_client import ApiException
-
-from datetime import datetime
-from base64 import b64decode
-from os import getenv
+"""Pruebas de la descarga del XML de un DTE recibido."""
 
 import os
+from base64 import b64decode
+from xml.etree import ElementTree
+
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
+from tests.respuestas import leer_texto
+
 
 class TestDescargarXmlDteRecibido(AbstractDteFacturacion):
-    """
-    Clase de prueebas para descargar un XML de un DTE recibido.
-    """
 
-    @classmethod
-    def setUpClass(cls):
+    """Clase de pruebas para descargar un XML de un DTE recibido."""
+
+    def _guardar(self, carpeta: str, nombre: str, contenido: bytes) -> str:
         """
-        Método de inicialización de variables y clases a utilizar.
+        Guarda un archivo descargado en tests/archivos/dte_facturacion.
+
+        :param str carpeta: Subcarpeta del archivo.
+        :param str nombre: Nombre del archivo.
+        :param bytes contenido: Contenido del archivo.
+        :return: Ruta del archivo guardado.
         """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(cls.dte.client.AMBIENTE_SII_PRUEBAS)
+        tests_dir = os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        )
+        output_dir = os.path.join(
+            tests_dir,
+            'archivos',
+            'dte_facturacion',
+            carpeta,
+        )
+        os.makedirs(output_dir, exist_ok=True)
+        filename = os.path.join(output_dir, nombre)
+        with open(filename, 'wb') as f:
+            f.write(contenido)
+        return filename
 
-    def test_descargar_xml_dte_recibido(self):
+    def _leer_xml(self, contenido: bytes) -> ElementTree.Element:
         """
-        Método de test para descargar un XML asociado a un DTE recibido.
+        Lee un XML del SII (codificado en ISO-8859-1).
+
+        :param bytes contenido: XML.
+        :return: Elemento raíz del XML.
         """
-        try:
-            # Se llama al método del abstract para listar DTEs recibidos.
-            dte_temp = self._listar_dtes_recibidos(self.contribuyente_rut)
-            # Se convierte en diccionario el resultado de la búsqueda.
-            dte_dict = dte_temp.json()
+        parser = ElementTree.XMLParser(encoding='ISO-8859-1')
+        return ElementTree.fromstring(contenido, parser=parser)
 
-            # Si no hay documentos, arroja error ApiException.
-            if len(dte_dict) == 0:
-                raise ApiException(
-                    'No se han encontrado documentos recibidos.',
-                    404
-                )
-
-            # Se descarga el XML del DTE recibido.
-            response = self.dte.get_xml_dte_recibido(
-                dte_dict[0]['emisor'],
-                dte_dict[0]['dte'],
-                dte_dict[0]['folio'],
-                dte_dict[0]['receptor']
-            )
-
-            # Retrocede dos niveles para salir de 'dte_facturacion' y entrar en 'tests'
-            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-
-            # Define la carpeta de destino correcta
-            output_dir = os.path.join(base_dir, 'archivos', 'dte_facturacion', 'dte_recibidos_xml')
-
-            # Crear la carpeta si no existe
-            os.makedirs(output_dir, exist_ok=True)
-
-            # Generar la ruta y nombre del archivo. El nombre tiene el siguiente formato:
-            # LIBREDTE_[rut_emisor]_[dte]_[folio].xml
-            filename = os.path.join(
-                output_dir,
-                'LIBREDTE_%(rut)s_%(dte)s_%(folio)s.xml' % {
-                    'rut' : dte_dict[0]['receptor'],
-                    'dte' : dte_dict[0]['dte'],
-                    'folio' : dte_dict[0]['folio']
-                }
-            )
-
-            # Se asegura que el codigo sea 200.
-            self.assertEqual(response.status_code, 200)
-
-            # Se genera el XML con el nombre previamente definido, y el
-            # contenido del response.
-            with open(filename, 'wb') as f:
-                f.write(b64decode(response.content))
-
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_descargar_xml_dte_temp() filename: ',
-                    filename
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception o si el código no es 200.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+    def test_descargar_xml_dte_recibido(self) -> None:
+        """El XML del DTE recibido (en base64) es un XML de un DTE."""
+        documento = self._primer_dte_recibido()
+        response = self.dte.get_xml_dte_recibido(
+            documento['emisor'],
+            documento['dte'],
+            documento['folio'],
+            self.contribuyente_rut,
+        )
+        xml = b64decode(leer_texto(response), validate=True)
+        self.assertIn('DTE', self._leer_xml(xml).tag)
+        # LIBREDTE_[rut_receptor]_[dte]_[folio].xml
+        filename = self._guardar(
+            'dte_recibidos_xml',
+            f'LIBREDTE_{self.contribuyente_rut}_{documento['dte']}_'
+            f'{documento['folio']}.xml',
+            xml,
+        )
+        self._mostrar('filename', filename)

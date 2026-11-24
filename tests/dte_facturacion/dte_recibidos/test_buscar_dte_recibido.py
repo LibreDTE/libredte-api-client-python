@@ -17,60 +17,29 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
-from libredte.api_client import ApiException
+"""Pruebas de la búsqueda de un DTE recibido específico."""
 
-from os import getenv
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
+from tests.respuestas import leer_dte_recibido
 
-import json
 
 class TestBuscarDteRecibido(AbstractDteFacturacion):
-    """
-    Clase de pruebas para buscar un DTE recibido específico.
-    """
 
-    @classmethod
-    def setUpClass(cls):
-        """
-        Método de inicialización de variables y clases a utilizar.
-        """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(cls.dte.client.AMBIENTE_SII_PRUEBAS)
+    """Clase de pruebas para buscar un DTE recibido específico."""
 
-    def test_buscar_dte_recibido(self):
-        """
-        Método de test para obtener DTE recibido específico.
-        """
-        try:
-            # Se llama al método del abstract para listar DTEs recibidos.
-            dte_temp = self._listar_dtes_recibidos(self.contribuyente_rut)
-            # Se convierte en diccionario el resultado de la búsqueda.
-            dte_dict = dte_temp.json()
-
-            # Si no hay documentos, arroja error ApiException.
-            if len(dte_dict) == 0:
-                raise ApiException(
-                    'No se han encontrado documentos recibidos.',
-                    404
-                )
-
-            # Se busca el DTE recibido buscado previamente.
-            response = self.dte.get_dte_recibido(
-                dte_dict[0]['emisor'],
-                dte_dict[0]['dte'],
-                dte_dict[0]['folio'],
-                dte_dict[0]['receptor']
-            )
-            # Se asegura que el codigo sea 200.
-            self.assertEqual(response.status_code, 200)
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_buscar_dte_recibido() dte: ',
-                    json.dumps(response.json())
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception o si el código no es 200.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+    def test_buscar_dte_recibido(self) -> None:
+        """La búsqueda entrega el DTE recibido solicitado."""
+        documento = self._primer_dte_recibido()
+        encontrado = leer_dte_recibido(
+            self.dte.get_dte_recibido(
+                documento['emisor'],
+                documento['dte'],
+                documento['folio'],
+                self.contribuyente_rut,
+            ),
+        )
+        self.assertEqual(str(encontrado['folio']), str(documento['folio']))
+        self.assertEqual(str(encontrado['emisor']), str(documento['emisor']))
+        self._mostrar('dte', encontrado)

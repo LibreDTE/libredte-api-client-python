@@ -17,48 +17,35 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
-from libredte.api_client import ApiException
+"""Pruebas del listado de DTE reales."""
 
-from os import getenv
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
+from tests.respuestas import leer_dtes_emitidos
 
-import json
 
 class TestListarDtesReales(AbstractDteFacturacion):
-    """
-    Clase de pruebas para listar DTEs reales.
-    """
 
-    @classmethod
-    def setUpClass(cls):
+    """Clase de pruebas para listar DTEs reales."""
+
+    def test_listar_dtes_reales(self) -> None:
         """
-        Método de inicialización de variables y clases a utilizar.
+        El listado solo incluye DTE del rango de fechas buscado.
+
+        IMPORTANTE: Se necesita tener DTE emitidos en los últimos 30 días.
         """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(cls.dte.client.AMBIENTE_SII_PRUEBAS)
-
-    def test_listar_dtes_reales(self):
-        """
-        Método de test para obtener una lista de DTEs reales.
-
-        IMPORTANTE: Se necesita una firma electrónica para emitir DTEs
-        reales, y por lo tanto listarlos.
-        """
-        try:
-            # Se llama al método del abstract para listar DTEs reales.
-            response = self._listar_dtes_reales(self.contribuyente_rut)
-
-            # Si el listado no falla, el programa pasa automáticamente.
-            self.assertTrue(True)
-
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_listar_dte_reales() dtes_reales:',
-                    json.dumps(response.json())
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+        self._primer_dte_emitido()
+        documentos = leer_dtes_emitidos(
+            self._listar_dtes_reales(self.contribuyente_rut),
+        )
+        for documento in documentos:
+            self.assertGreaterEqual(
+                documento['fecha'],
+                self.filtros['fecha_desde'],
+            )
+            self.assertLessEqual(
+                documento['fecha'],
+                self.filtros['fecha_hasta'],
+            )
+        self._mostrar('dtes_reales', documentos)

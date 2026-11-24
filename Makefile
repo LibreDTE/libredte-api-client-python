@@ -1,44 +1,71 @@
+# Targets that are not files. docs, dist and tests are also folders of the
+# repository: without .PHONY, make would take them as up to date.
+.PHONY: all dist upload install-dev lint typecheck check tests \
+	tests-readonly docs clean
+
+# Python used to create the environment (minimum 3.14, as requires-python).
+PYTHON ?= python3.14
+
+# Named "venv" because [tool.pyright] looks for the environment there.
+VENV = venv
+VENV_READY = $(VENV)/.installed
+
 all: dist
 
-dist:
-	python3 setup.py sdist
+# Source distribution (sdist), built with the [build-system] of
+# pyproject.toml. dist/ is emptied first, so upload sends only this build.
+dist: $(VENV_READY)
+	rm -rf dist
+	$(VENV)/bin/python -m build --sdist
 
 upload: dist
-	twine upload dist/*
+	$(VENV)/bin/twine upload dist/*
 
-install-dev:
-	python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt
+# Created on the first command and reinstalled when pyproject.toml changes.
+# An existing environment is not created again, so its Python is kept.
+$(VENV_READY): pyproject.toml
+	test -x $(VENV)/bin/python || $(PYTHON) -m venv $(VENV)
+	$(VENV)/bin/python -c 'import sys; sys.exit(sys.version_info < (3, 14) and "$(VENV) usa Python %s.%s; se requiere 3.14 o superior: rm -rf $(VENV)" % sys.version_info[:2])'
+	$(VENV)/bin/python -m pip install --upgrade pip
+	$(VENV)/bin/python -m pip install -e .
+	$(VENV)/bin/python -m pip install --group dev
+	touch $(VENV_READY)
 
-tests: install-dev
-	python tests/run.py
+install-dev: $(VENV_READY)
 
-tests-dte:
-	python3 tests/run.py dte_facturacion
+lint: $(VENV_READY)
+	$(VENV)/bin/ruff check .
 
-tests-dte_real:
-	python3 tests/run.py dte_facturacion.dte_real
+typecheck: $(VENV_READY)
+	$(VENV)/bin/mypy
+	$(VENV)/bin/pyright
 
-tests-dte_rec:
-	python3 tests/run.py dte_facturacion.dte_recibidos
+check: lint typecheck
 
-tests-dte_temp:
-	python3 tests/run.py dte_facturacion.dte_temp
+tests: $(VENV_READY)
+	$(VENV)/bin/python tests/run.py
 
-tests-cobros:
-	python3 tests/run.py pagos_cobros_masivos
+# Subset run by the CI: the tests without network, and the ones of DTE
+# temporales and cobros (they do not emit real DTE nor send emails).
+tests-readonly: $(VENV_READY)
+	$(VENV)/bin/python tests/run.py api_client.test_configuracion
+	$(VENV)/bin/python tests/run.py api_client.test_conexion
+	$(VENV)/bin/python tests/run.py api_client.test_url
+	$(VENV)/bin/python tests/run.py api_client.test_manejo_errores
+	$(VENV)/bin/python tests/run.py dte_facturacion.dte_temp.test_buscar_dte_temp.TestBuscarDteTemp
+	$(VENV)/bin/python tests/run.py dte_facturacion.dte_temp.test_descargar_pdf_dte_temp.TestDescargarPdfDteTemp
+	$(VENV)/bin/python tests/run.py dte_facturacion.dte_temp.test_descargar_xml_dte_temp.TestDescargarXmlDteTemp
+	$(VENV)/bin/python tests/run.py dte_facturacion.dte_temp.test_emitir_dte_temp.TestEmitirDteTemp
+	$(VENV)/bin/python tests/run.py dte_facturacion.dte_temp.test_eliminar_dte_temp.TestEliminarDteTemp
+	$(VENV)/bin/python tests/run.py dte_facturacion.dte_temp.test_listar_dtes_temp.TestListarDtesTemp
+	$(VENV)/bin/python tests/run.py pagos_cobros_masivos.test_buscar_cobro_programado.TestBuscarCobroProgramado
+	$(VENV)/bin/python tests/run.py pagos_cobros_masivos.test_listar_cobros_masivos_programados.TestListarCobrosMasivosProgramados
 
-tests-readonly:
-	python3 tests/run.py dte_facturacion.dte_temp.test_buscar_dte_temp.TestBuscarDteTemp
-	python3 tests/run.py dte_facturacion.dte_temp.test_descargar_pdf_dte_temp.TestDescargarPdfDteTemp
-	python3 tests/run.py dte_facturacion.dte_temp.test_descargar_xml_dte_temp.TestDescargarXmlDteTemp
-	python3 tests/run.py dte_facturacion.dte_temp.test_emitir_dte_temp.TestEmitirDteTemp
-	python3 tests/run.py dte_facturacion.dte_temp.test_eliminar_dte_temp.TestEliminarDteTemp
-	python3 tests/run.py dte_facturacion.dte_temp.test_listar_dtes_temp.TestListarDtesTemp
-	python3 tests/run.py pagos_cobros_masivos.test_buscar_cobro_programado.TestBuscarCobroProgramado
-	python3 tests/run.py pagos_cobros_masivos.test_listar_cobros_masivos_programados.TestListarCobrosMasivosProgramados
-
-docs:
-	sphinx-apidoc -o docs libredte && sphinx-build -b html docs docs/_build/html
+# sphinx-apidoc -f regenerates the .rst of the API reference, so new modules
+# are added to it.
+docs: $(VENV_READY)
+	$(VENV)/bin/sphinx-apidoc -f -o docs libredte
+	$(VENV)/bin/sphinx-build -b html docs docs/_build/html
 
 clean:
-	rm -rf dist libredte.egg-info libredte/__pycache__ libredte/*.pyc
+	rm -rf dist libredte.egg-info libredte/__pycache__ libredte/*.pyc .ruff_cache .mypy_cache

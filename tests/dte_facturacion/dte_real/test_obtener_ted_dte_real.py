@@ -1,4 +1,4 @@
-
+#
 # LibreDTE: Cliente de API en Python.
 # Copyright (C) LibreDTE <https://www.libredte.cl>
 #
@@ -17,59 +17,41 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
-from libredte.api_client import ApiClient, ApiException
+"""Pruebas de la obtención del TED de un DTE real."""
 
-from os import getenv
+from base64 import b64decode
+from xml.etree import ElementTree
 
-import json
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
+from tests.respuestas import leer_texto
 
-class TestBuscarDocumentoEmitido(AbstractDteFacturacion):
-    """
-    Clase de pruebas para obtener el TED de un documento emitido.
-    """
-    @classmethod
-    def setUpClass(cls):
+
+class TestObtenerTedDteReal(AbstractDteFacturacion):
+
+    """Clase de pruebas para obtener el TED de un documento emitido."""
+
+    def _leer_xml(self, contenido: bytes) -> ElementTree.Element:
         """
-        Método para inicialización de variables y clases a utilizar.
-        """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(ApiClient.AMBIENTE_SII_PRUEBAS)
+        Lee un XML del SII (codificado en ISO-8859-1).
 
-    def test_dte_ted(self):
+        :param bytes contenido: XML.
+        :return: Elemento raíz del XML.
         """
-        Método de test para obtener el Timbre electrónico de DTE (TED) de
-        un DTE emitido.
-        """
-        try:
-            # Se llama al método del abstract para listar DTEs reales.
-            documentos = self._listar_dtes_reales(self.contribuyente_rut)
-            # Se convierte en diccionario el resultado de la búsqueda.
-            documentos_dict = documentos.json()
+        parser = ElementTree.XMLParser(encoding='ISO-8859-1')
+        return ElementTree.fromstring(contenido, parser=parser)
 
-            # Formato del TED.
-            formato = 'xml'  # Opciones: png (defecto), bmp, xml
-            # Filtros a utilizar.
-            filtros = {
-                'formato': formato
-            }
-            # Se intenta obtener el TED de un DTE emitido.
-            response = self.dte.dte_emitidos_ted(
-                documentos_dict[0]['dte'],
-                documentos_dict[0]['folio'],
-                self.contribuyente_rut,
-                filtros=filtros
-            )
-            # Se asegura que el codigo sea 200.
-            self.assertEqual(response.status_code, 200)
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_obtener_ted_dte_real() ted: ',
-                    json.dumps(response.json())
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception o si el código no es 200.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+    def test_dte_ted(self) -> None:
+        """El TED en formato XML (en base64) es un XML con raíz TED."""
+        documento = self._primer_dte_emitido()
+        response = self.dte.dte_emitidos_ted(
+            documento['dte'],
+            documento['folio'],
+            self.contribuyente_rut,
+            # Opciones: png (defecto), bmp, xml
+            filtros={'formato': 'xml'},
+        )
+        ted = b64decode(leer_texto(response), validate=True)
+        self.assertTrue(self._leer_xml(ted).tag.endswith('TED'))
+        self._mostrar('ted', ted.decode('ISO-8859-1'))

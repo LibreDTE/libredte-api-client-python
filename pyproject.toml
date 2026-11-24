@@ -1,0 +1,226 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "libredte"
+
+# Versions should comply with PEP440
+version = "5.0.0"
+
+description = "Cliente para realizar la integración con los servicios web de LibreDTE desde Python."
+readme = "README.rst"
+license = "LGPL-3.0-or-later"
+license-files = ["COPYING"]
+authors = [{name = "LibreDTE", email = "dev@libredte.cl"}]
+keywords = ["sii", "chile", "facturación", "electrónica"]
+
+# Minimum Python version supported
+requires-python = ">=3.14"
+
+# See https://pypi.org/classifiers/
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Build Tools",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.14",
+  "Typing :: Typed",
+]
+
+# Run-time dependencies, installed with the package
+dependencies = [
+  "certifi==2024.7.4",
+  "charset-normalizer==3.3.2",
+  "idna==3.7",
+  "requests==2.32.4",
+  "urllib3==2.6.3",
+]
+
+[project.urls]
+Homepage = "https://github.com/LibreDTE/libredte-api-client-python"
+
+[dependency-groups]
+
+# Development tools, not installed with the package: `pip install --group dev`
+dev = [
+  # Lint and type checking
+  "mypy==2.4.0",
+  "pyright==1.1.414",
+  "ruff==0.16.3",
+  "types-requests==2.32.4.20250913",
+  # Tests
+  "python-dotenv==1.0.0",
+  # Documentation (Sphinx)
+  "alabaster==0.7.15",
+  "Babel==2.14.0",
+  "docutils==0.20.1",
+  "imagesize==1.4.1",
+  "Jinja2==3.1.6",
+  "MarkupSafe==2.1.3",
+  "Pygments==2.17.2",
+  "snowballstemmer==2.2.0",
+  "Sphinx==7.2.6",
+  "sphinx-rtd-theme==2.0.0",
+  "sphinxcontrib-applehelp==1.0.7",
+  "sphinxcontrib-devhelp==1.0.5",
+  "sphinxcontrib-htmlhelp==2.0.4",
+  "sphinxcontrib-jquery==4.1",
+  "sphinxcontrib-jsmath==1.0.1",
+  "sphinxcontrib-qthelp==1.0.6",
+  "sphinxcontrib-serializinghtml==1.1.9",
+  # Build and upload to PyPI (build, twine)
+  "build==1.6.1",
+  "id==1.6.1",
+  "importlib-metadata==7.0.1",
+  "jaraco.classes==3.3.0",
+  "keyring==24.3.0",
+  "markdown-it-py==3.0.0",
+  "mdurl==0.1.2",
+  "more-itertools==10.2.0",
+  "nh3==0.2.15",
+  "packaging==26.3",
+  "pkginfo==1.9.6",
+  "pyproject_hooks==1.3.3",
+  "readme-renderer==42.0",
+  "requests-toolbelt==1.0.0",
+  "rfc3986==2.0.0",
+  "rich==13.7.0",
+  "twine==6.2.0",
+  "zipp==3.19.1",
+]
+
+[tool.setuptools.packages.find]
+exclude = ["tests", "tests.*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+# py.typed: marca el paquete como tipado (PEP 561), para que los proyectos
+# que lo usan vean sus tipos
+libredte = ["py.typed"]
+
+[tool.ruff]
+
+# Files to include in linting (Python source and stub files)
+include = ["**/*.py", "**/*.pyi"]
+
+# Folders to exclude from linting (e.g., virtual environments, build folders)
+exclude = [
+  ".git",
+  "__pycache__",
+  "build",
+  "dist",
+  ".venv",
+  "venv",
+]
+
+# Maximum allowed characters per line
+line-length = 79
+
+# Target Python version (used for version-specific rules)
+target-version = "py314"
+
+# Respect `.gitignore` files (e.g., to skip __init__.py or ignored files)
+respect-gitignore = true
+
+# Apply fixes only with `ruff check --fix` (avoid rewriting the tree on `ruff check .`)
+fix = false
+
+[tool.ruff.lint]
+
+# List of enabled rule categories
+select = [
+  "D",    # pydocstyle: docstring conventions
+  "F",    # Pyflakes: code correctness errors
+  "E",    # pycodestyle: style errors
+  "W",    # pycodestyle: warnings
+  "I",    # isort: import order checks
+  "UP",   # Python upgrades: modern language features
+  "N",    # pep8-naming: naming conventions
+  "B",    # bugbear: common bug patterns
+  "A",    # flake8-builtins: avoid shadowing built-in names
+  "C90",  # mccabe: cyclomatic complexity
+  "ARG",  # flake8-unused-arguments: unused arguments detection
+  "DTZ",  # datetimez: best practices with datetime usage
+  "TRY",  # tryceratops: exception handling best practices
+  "SLF",  # flake8-self: discourage private attribute access
+  "ERA",  # eradicate: detect commented-out/dead code
+  "PL",   # pylint: extra validations
+  "RUF",  # Ruff-specific rules
+]
+
+# Rules to ignore (useful for relaxing or customizing enforcement)
+ignore = [
+  # Docstring style: these rules are the opposite of D203 and D213, which
+  # the project follows (both enabled). Ruff cannot enforce both rules of a
+  # pair, so one of each pair must be disabled.
+  "D211",    # Opposite of D203 (blank line before class docstring)
+  "D212",    # Opposite of D213 (summary on the docstring's second line)
+  # Project patterns, not errors:
+  "N818",    # Exceptions keep their current names (`ApiException`, part of
+             # the public API), not the 'Error' suffix
+]
+
+[tool.ruff.lint.mccabe]
+
+# Maximum cyclomatic complexity allowed before a warning is raised
+max-complexity = 25
+
+[tool.ruff.lint.pylint]
+max-args = 20 # Maximum number of arguments for a function
+max-branches = 25 # Maximum number of branches for a function
+max-statements = 60 # Maximum number of statements for a function
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.mypy]
+
+# Target Python version
+python_version = "3.14"
+
+# Folders checked when running `mypy` without arguments
+files = ["libredte", "tests", "docs"]
+
+# Folders to exclude from type checking
+exclude = ["build/", "dist/", "venv/"]
+
+# Strict mode: every function with type annotations, no implicit Any and
+# no untyped calls (it includes check_untyped_defs)
+strict = true
+
+# Checks outside strict mode: variables that may be unassigned, iterables
+# (always truthy) used as conditions and use of deprecated functions
+enable_error_code = ["possibly-undefined", "truthy-iterable", "deprecated"]
+
+# The type of a variable created empty (None, [], {}) is inferred only in
+# the scope where it is created, not from other functions
+local_partial_types = true
+
+[tool.pyright]
+
+# Folders to exclude from type checking
+exclude = [
+  "**/node_modules",
+  "**/__pycache__",
+  "build",
+  "dist",
+  ".git",
+  "venv",
+  ".venv",
+]
+
+# Target Python version
+pythonVersion = "3.14"
+
+# Type checking mode: strict (no unknown types, unnecessary checks are
+# errors)
+typeCheckingMode = "strict"
+
+# Code that can never run (outside strict mode)
+reportUnreachable = "error"
+
+# Virtual environment with the dependencies: ./venv
+venvPath = "."
+venv = "venv"

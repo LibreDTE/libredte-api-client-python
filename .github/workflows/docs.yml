@@ -16,14 +16,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.14'
 
       - name: Install Sphinx and dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install sphinx sphinx-rtd-theme
+          # Paquete con sus dependencias y el grupo dev de pyproject.toml,
+          # que incluye Sphinx y su tema
+          pip install -e . --group dev
 
       - name: Build Documentation
         run: |

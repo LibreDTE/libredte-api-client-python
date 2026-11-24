@@ -16,57 +16,31 @@
 # (LGPL) junto a este programa. En caso contrario, consulte
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
-#
 
-from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
-from libredte.api_client import ApiClient, ApiException
+"""Pruebas de la consulta del estado de un DTE real."""
 
-from os import getenv
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
+from tests.respuestas import leer_dte_emitido
 
-import json
 
 class TestConsultarEstadoDteReal(AbstractDteFacturacion):
-    """
-    Clase de pruebas para consultar el estado de un DTE real.
-    """
 
-    @classmethod
-    def setUpClass(cls):
-        """
-        Método para inicialización de variables y clases a utilizar.
-        """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(ApiClient.AMBIENTE_SII_PRUEBAS)
+    """Clase de pruebas para consultar el estado de un DTE real."""
 
-    def test_consultar_estado_dte_real(self):
-        """
-        Método de test para consultar el estado de un DTE real.
-        """
-        try:
-            # Se llama al método del abstract para listar DTEs reales.
-            documentos = self._listar_dtes_reales(self.contribuyente_rut)
-            # Se convierte en diccionario el resultado de la búsqueda.
-            documentos_dict = documentos.json()
-            # Filtros para consultar el estado del DTE real.
-            filtros = {
-                'emisor': self.contribuyente_rut,
-                'dte': documentos_dict[0]['dte'],
-                'folio': documentos_dict[0]['folio'],
-                'fecha': documentos_dict[0]['fecha'],
-                'total': documentos_dict[0]['total'],
-            }
-            # Se intenta efectuar la consulta del estado.
-            response = self.dte.dte_emitidos_consultar(filtros=filtros)
-            # Se asegura que el codigo sea 200.
-            self.assertEqual(response.status_code, 200)
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_consultar_estado_dte_real() estado: ',
-                    json.dumps(response.json())
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception o si el código no es 200.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+    def test_consultar_estado_dte_real(self) -> None:
+        """La consulta entrega el DTE real con los datos indicados."""
+        documento = self._primer_dte_emitido()
+        filtros = {
+            'emisor': self.contribuyente_rut,
+            'dte': documento['dte'],
+            'folio': documento['folio'],
+            'fecha': documento['fecha'],
+            'total': documento['total'],
+        }
+        consultado = leer_dte_emitido(
+            self.dte.dte_emitidos_consultar(filtros=filtros),
+        )
+        self.assertEqual(str(consultado['folio']), str(documento['folio']))
+        self._mostrar('estado', consultado)

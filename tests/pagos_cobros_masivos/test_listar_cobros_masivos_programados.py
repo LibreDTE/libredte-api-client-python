@@ -17,85 +17,22 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from tests.pagos_cobros_masivos.abstract_pagos_cobros_masivos import AbstractPagosCobrosMasivos
+"""Pruebas del listado de cobros."""
 
-from libredte.api_client import ApiException
+from tests.pagos_cobros_masivos.abstract_pagos_cobros_masivos import (
+    AbstractPagosCobrosMasivos,
+)
+from tests.respuestas import leer_lista_objetos
 
-from datetime import datetime
-from os import getenv
-
-import json
 
 class TestListarCobrosMasivosProgramados(AbstractPagosCobrosMasivos):
-    """
-    Clase de pruebas para listar cobros.
-    """
-    datos = {
-        'Encabezado': {
-            'IdDoc': {
-                'TipoDTE': 33,
-                'FchEmis': None, # se reemplaza al preparar la clase
-            },
-            'Emisor': {
-                'RUTEmisor': None # se reemplaza al preparar la clase
-            },
-            'Receptor': {
-                'RUTRecep': '60803000-K',
-                'RznSocRecep': 'Servicio de Impuestos Internos (SII)',
-                'GiroRecep': 'Administración Pública',
-                'Contacto': '+56 2 3252 5575',
-                'CorreoRecep': 'facturacionmipyme@sii.cl',
-                'DirRecep': 'Teatinos 120',
-                'CmnaRecep': 'Santiago',
-            }
-        },
-        'Detalle': [
-            {
-                #'IndExe': 1, # para items exentos
-                'NmbItem': 'Asesoría de LibreDTE',
-                'QtyItem': 1,
-                'PrcItem': 1000,
-            }
-        ],
-        'Referencia': [
-            {
-                'TpoDocRef': 801,
-                'FolioRef': 'OC123',
-                'FchRef': '2015-10-01',
-            }
-        ],
-    }
 
-    @classmethod
-    def setUpClass(cls):
-        """
-        Método de inicialización de variables y clases a utilizar.
-        """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        fecha_emision = getenv('TEST_DTE_FACTURAR_FECHA_EMISION', datetime.now().strftime('%Y-%m-%d')).strip()
-        cls.datos['Encabezado']['IdDoc']['FchEmis'] = fecha_emision
-        cls.datos['Encabezado']['Emisor']['RUTEmisor'] = cls.contribuyente_rut
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(cls.dte.client.AMBIENTE_SII_PRUEBAS)
+    """Clase de pruebas para listar cobros."""
 
-    def test_listar_cobros(self):
-        """
-        Método de test para listar cobros del usuario.
-        """
-        try:
-            # Se llama al método del abstract para listar cobros programados.
-            response = self._listar_cobros(self.contribuyente_rut)
-
-            # Si el listado no falla, el programa pasa automáticamente.
-            self.assertTrue(True)
-
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_listar_cobros_masivos_programados() cobros: ',
-                    json.dumps(response.json())
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+    def test_listar_cobros(self) -> None:
+        """El listado de cobros sin pagar no incluye cobros pagados."""
+        response = self._listar_cobros(self.contribuyente_rut)
+        cobros = leer_lista_objetos(response)
+        for cobro in cobros:
+            self.assertFalse(cobro.get('pagado'), cobro)
+        self._mostrar('cobros', cobros)

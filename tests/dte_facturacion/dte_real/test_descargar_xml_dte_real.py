@@ -17,83 +17,75 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
-from libredte.api_client import ApiException
-
-from datetime import datetime
-from base64 import b64decode
-from os import getenv
+"""Pruebas de la descarga del XML de un DTE real."""
 
 import os
+from base64 import b64decode
+from xml.etree import ElementTree
+
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
+from tests.respuestas import leer_texto
+
 
 class TestDescargarXmlDteReal(AbstractDteFacturacion):
-    """
-    Clase de prueebas para descargar un XML de un DTE real.
-    """
 
-    @classmethod
-    def setUpClass(cls):
-        """
-        Método de inicialización de variables y clases a utilizar.
-        """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(cls.dte.client.AMBIENTE_SII_PRUEBAS)
+    """Clase de pruebas para descargar un XML de un DTE real."""
 
-    def test_descargar_xml_dte_real(self):
+    def _guardar(self, carpeta: str, nombre: str, contenido: bytes) -> str:
         """
-        Método de test para descargar un XML asociado a un DTE real.
+        Guarda un archivo descargado en tests/archivos/dte_facturacion.
+
+        :param str carpeta: Subcarpeta del archivo.
+        :param str nombre: Nombre del archivo.
+        :param bytes contenido: Contenido del archivo.
+        :return: Ruta del archivo guardado.
+        """
+        tests_dir = os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        )
+        output_dir = os.path.join(
+            tests_dir,
+            'archivos',
+            'dte_facturacion',
+            carpeta,
+        )
+        os.makedirs(output_dir, exist_ok=True)
+        filename = os.path.join(output_dir, nombre)
+        with open(filename, 'wb') as f:
+            f.write(contenido)
+        return filename
+
+    def _leer_xml(self, contenido: bytes) -> ElementTree.Element:
+        """
+        Lee un XML del SII (codificado en ISO-8859-1).
+
+        :param bytes contenido: XML.
+        :return: Elemento raíz del XML.
+        """
+        parser = ElementTree.XMLParser(encoding='ISO-8859-1')
+        return ElementTree.fromstring(contenido, parser=parser)
+
+    def test_descargar_xml_dte_real(self) -> None:
+        """
+        El XML del DTE real (en base64) es un XML de un DTE.
 
         IMPORTANTE: Se necesita tener un DTE real (emitido) para esta prueba.
         """
-        try:
-            # Se llama al método del abstract para emitir un DTE real.
-            dte_temp = self._listar_dtes_reales(self.contribuyente_rut)
-            # Se convierte en diccionario el resultado de la búsqueda.
-            dte_dict = dte_temp.json()
-
-            # Se descarga el XML del DTE real.
-            response = self.dte.get_xml_dte_real(
-                dte_dict[0]['dte'],
-                dte_dict[0]['folio'],
-                dte_dict[0]['emisor']
-            )
-
-            # Retrocede dos niveles para salir de 'dte_facturacion' y entrar en 'tests'
-            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-
-            # Define la carpeta de destino correcta
-            output_dir = os.path.join(base_dir, 'archivos', 'dte_facturacion', 'dte_real_xml')
-
-            # Crear la carpeta si no existe
-            os.makedirs(output_dir, exist_ok=True)
-
-            # Generar la ruta y nombre del archivo. El nombre tiene el siguiente formato:
-            # LIBREDTE_[rut_emisor]_[dte]_[folio].xml
-            filename = os.path.join(
-                output_dir,
-                'LIBREDTE_%(rut)s_%(dte)s_%(folio)s.xml' % {
-                    'rut' : dte_dict[0]['emisor'],
-                    'dte' : dte_dict[0]['dte'],
-                    'folio' : dte_dict[0]['folio']
-                }
-            )
-
-            # Se asegura que el codigo sea 200.
-            self.assertEqual(response.status_code, 200)
-
-            # Se genera el XML con el nombre previamente definido, y el
-            # contenido del response.
-            with open(filename, 'wb') as f:
-                f.write(b64decode(response.content))
-
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_descargar_xml_dte_real() filename: ',
-                    filename
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception o si el código no es 200.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+        documento = self._primer_dte_emitido()
+        response = self.dte.get_xml_dte_real(
+            documento['dte'],
+            documento['folio'],
+            self.contribuyente_rut,
+        )
+        xml = b64decode(leer_texto(response), validate=True)
+        self.assertIn('DTE', self._leer_xml(xml).tag)
+        # LIBREDTE_[rut_emisor]_[dte]_[folio].xml
+        filename = self._guardar(
+            'dte_real_xml',
+            f'LIBREDTE_{self.contribuyente_rut}_{documento['dte']}_'
+            f'{documento['folio']}.xml',
+            xml,
+        )
+        self._mostrar('filename', filename)

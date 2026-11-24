@@ -17,87 +17,20 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
-from libredte.api_client import ApiException
+"""Pruebas de la emisión de un DTE temporal."""
 
-from datetime import datetime
-from os import getenv
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
 
-import json
 
 class TestEmitirDteTemp(AbstractDteFacturacion):
-    """
-    Clase de pruebas que permite emitir un DTE temporal.
-    """
 
-    # Diccionario de datos de un DTE para emitir.
-    datos = {
-        'Encabezado': {
-            'IdDoc': {
-                'TipoDTE': 33,
-                'FchEmis': None, # se reemplaza al preparar la clase
-            },
-            'Emisor': {
-                'RUTEmisor': None # se reemplaza al preparar la clase
-            },
-            'Receptor': {
-                'RUTRecep': '60803000-K',
-                'RznSocRecep': 'Servicio de Impuestos Internos (SII)',
-                'GiroRecep': 'Administración Pública',
-                'Contacto': '+56 2 3252 5575',
-                'CorreoRecep': 'facturacionmipyme@sii.cl',
-                'DirRecep': 'Teatinos 120',
-                'CmnaRecep': 'Santiago',
-            }
-        },
-        'Detalle': [
-            {
-                #'IndExe': 1, # para items exentos
-                'NmbItem': 'Asesoría de LibreDTE',
-                'QtyItem': 1,
-                'PrcItem': 1000,
-            }
-        ],
-        'Referencia': [
-            {
-                'TpoDocRef': 801,
-                'FolioRef': 'OC123',
-                'FchRef': '2015-10-01',
-            }
-        ],
-    }
+    """Clase de pruebas que permite emitir un DTE temporal."""
 
-    @classmethod
-    def setUpClass(cls):
-        """
-        Método de inicialización de variables y clases a utilizar.
-        """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        fecha_emision = getenv('TEST_DTE_FACTURAR_FECHA_EMISION', datetime.now().strftime('%Y-%m-%d')).strip()
-        cls.datos['Encabezado']['IdDoc']['FchEmis'] = fecha_emision
-        cls.datos['Encabezado']['Emisor']['RUTEmisor'] = cls.contribuyente_rut
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(cls.dte.client.AMBIENTE_SII_PRUEBAS)
-
-    def test_emitir_dte_temp(self):
-        """
-        Método de test para emitir un DTE temporal a partir de información
-        predefinida en la clase padre.
-        """
-        try:
-            # Se llama al método del abstract para emitir un DTE temporal.
-            response = self._emitir_dte_temporal(self.datos)
-
-            # Se asegura que el codigo sea 200.
-            self.assertEqual(response.status_code, 200)
-
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_emitir_dte_real() dte_real: ',
-                    json.dumps(response.json())
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception o si el código no es 200.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+    def test_emitir_dte_temp(self) -> None:
+        """Al emitir, la API entrega el tipo y el código del DTE temporal."""
+        dte_temporal = self._emitir_dte_temporal(self.datos)
+        self.assertEqual(int(dte_temporal['dte']), 33)
+        self.assertTrue(dte_temporal['codigo'])
+        self._mostrar('dte_temporal', dte_temporal)

@@ -16,3 +16,5 @@
 # (LGPL) junto a este programa. En caso contrario, consulte
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
+
+"""Pruebas de DTE reales (emitidos)."""

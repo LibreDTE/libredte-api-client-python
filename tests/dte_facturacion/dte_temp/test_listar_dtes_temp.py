@@ -17,45 +17,26 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
-from libredte.api_client import ApiException
+"""Pruebas del listado de DTE temporales."""
 
-from os import getenv
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
+from tests.respuestas import leer_dtes_temporales
 
-import json
 
 class TestListarDtesTemp(AbstractDteFacturacion):
-    """
-    Clase de pruebas para listar DTEs temporales.
-    """
 
-    @classmethod
-    def setUpClass(cls):
-        """
-        Método de inicialización de variables y clases a utilizar.
-        """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(cls.dte.client.AMBIENTE_SII_PRUEBAS)
+    """Clase de pruebas para listar DTEs temporales."""
 
-    def test_listar_dtes_temp(self):
-        """
-        Método de test para obtener una lista de DTEs temporales.
-        """
-        try:
-            # Se llama al método del abstract para listar DTEs temporales.
-            response = self._listar_dtes_temp(self.contribuyente_rut)
-
-            # Si el listado no falla, el programa pasa automáticamente.
-            self.assertTrue(True)
-
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_listar_dtes_temp() dtes_temp:',
-                    json.dumps(response.json())
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+    def test_listar_dtes_temp(self) -> None:
+        """El listado incluye el DTE temporal recién emitido."""
+        dte_temporal = self._emitir_dte_temporal(self.datos)
+        documentos = leer_dtes_temporales(
+            self._listar_dtes_temp(self.contribuyente_rut),
+        )
+        self.assertIn(
+            dte_temporal['codigo'],
+            [documento['codigo'] for documento in documentos],
+        )
+        self._mostrar('dtes_temp', documentos)

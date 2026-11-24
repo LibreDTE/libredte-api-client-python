@@ -17,112 +17,59 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
-from libredte.api_client import ApiClient, ApiException
+"""Pruebas del envío por correo de un DTE real."""
 
-from datetime import datetime
+import unittest
 from os import getenv
+from typing import ClassVar
 
-import json
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
+
 
 class TestEnviarEmailDteReal(AbstractDteFacturacion):
-    """
-    Clase de pruebas para actualizar el estado de un DTE emitido (real).
-    """
 
-    # Diccionario de datos de un DTE para emitir.
-    datos = {
-        'Encabezado': {
-            'IdDoc': {
-                'TipoDTE': 33,
-                'FchEmis': None, # se reemplaza al preparar la clase
-            },
-            'Emisor': {
-                'RUTEmisor': None # se reemplaza al preparar la clase
-            },
-            'Receptor': {
-                'RUTRecep': '60803000-K',
-                'RznSocRecep': 'Servicio de Impuestos Internos (SII)',
-                'GiroRecep': 'Administración Pública',
-                'Contacto': '+56 2 3252 5575',
-                'CorreoRecep': 'facturacionmipyme@sii.cl',
-                'DirRecep': 'Teatinos 120',
-                'CmnaRecep': 'Santiago',
-            }
-        },
-        'Detalle': [
-            {
-                #'IndExe': 1, # para items exentos
-                'NmbItem': 'Asesoría de LibreDTE',
-                'QtyItem': 1,
-                'PrcItem': 1000,
-            }
-        ],
-        'Referencia': [
-            {
-                'TpoDocRef': 801,
-                'FolioRef': 'OC123',
-                'FchRef': '2015-10-01',
-            }
-        ],
-    }
+    """Clase de pruebas para enviar por correo un DTE emitido (real)."""
+
+    # Correo al que se envía el DTE (variable de entorno TEST_EMAIL).
+    email: ClassVar[str]
 
     @classmethod
-    def setUpClass(cls):
-        """
-        Método para inicialización de variables y clases a utilizar.
-        """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        cls.email = getenv('TEST_EMAIL')
-        fecha_emision = getenv('TEST_DTE_FACTURAR_FECHA_EMISION', datetime.now().strftime('%Y-%m-%d')).strip()
-        cls.datos['Encabezado']['IdDoc']['FchEmis'] = fecha_emision
-        cls.datos['Encabezado']['Emisor']['RUTEmisor'] = cls.contribuyente_rut
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(ApiClient.AMBIENTE_SII_PRUEBAS)
+    def setUpClass(cls) -> None:
+        """Prepara el cliente y el correo de destino de la prueba."""
+        email = getenv('TEST_EMAIL', '').strip()
+        if not email:
+            msg = 'Se debe configurar la variable de entorno TEST_EMAIL.'
+            raise unittest.SkipTest(msg)
+        cls.email = email
+        super().setUpClass()
 
-    def test_enviar_email_dte_real(self):
+    def test_enviar_email_dte_real(self) -> None:
         """
-        Método de test para enviar un DTE emitido existente por correo.
-        """
-        try:
-            # Se llama al método del abstract para listar DTEs reales.
-            documentos = self._listar_dtes_reales(self.contribuyente_rut)
-            # Se convierte en diccionario el resultado de la búsqueda.
-            documentos_dict = documentos.json()
-            # Datos del correo a enviar.
-            datos_email = {
-                'emails': [self.email],
-                'asunto': '[LibreDTE API Client Test] Envío de DTE T%(dte)sF%(folio)s de %(rut)s' % {
-                    'dte': documentos_dict[0]['dte'],
-                    'folio': documentos_dict[0]['folio'],
-                    'rut': self.contribuyente_rut
-                },
-                'mensaje': 'LibreDTE API Client Test: DTE ID T%(dte)sF%(folio)s de %(rut)s.' % {
-                    'dte': documentos_dict[0]['dte'],
-                    'folio': documentos_dict[0]['folio'],
-                    'rut': self.contribuyente_rut
-                },
-                'pdf': True,
-                'cedible': True,
-                'papelContinuo': False,
-            }# TODO: Revisar formato de comillas (estandarizar con comillas simples).
-            # Se intenta enviar el correo con el DTE emitido.
-            response = self.dte.dte_real_enviar_email(
-                documentos_dict[0]['dte'],
-                documentos_dict[0]['folio'],
-                self.contribuyente_rut,
-                datos_email
-            )
+        El DTE emitido se envía por correo a TEST_EMAIL.
 
-            # Se asegura que el codigo sea 200.
-            self.assertEqual(response.status_code, 200)
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_enviar_email_dte_real() email: ',
-                    json.dumps(response.json())
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception o si el código no es 200.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+        IMPORTANTE: Si el receptor del DTE no tiene correo, la API guarda
+        TEST_EMAIL como correo del receptor.
+        """
+        documento = self._primer_dte_emitido()
+        dte = documento['dte']
+        folio = documento['folio']
+        rut = self.contribuyente_rut
+        datos_email = {
+            'emails': [self.email],
+            'asunto': (
+                '[LibreDTE API Client Test] Envío de DTE '
+                f'T{dte}F{folio} de {rut}'
+            ),
+            'mensaje': (
+                'LibreDTE API Client Test: DTE ID '
+                f'T{dte}F{folio} de {rut}.'
+            ),
+            'pdf': True,
+            'cedible': True,
+            'papelContinuo': False,
+        }
+        response = self.dte.dte_real_enviar_email(dte, folio, rut, datos_email)
+        self.assertEqual(response.status_code, 200)
+        self._mostrar('email', response.text)

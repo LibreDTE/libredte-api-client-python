@@ -4,51 +4,54 @@ on:
   push:
     branches:
       - master  # Ejecuta pruebas al hacer push en la rama 'master'
-
-env:
-  env_var: ${{ vars.ENV_CONTEXT_VAR }}
+  pull_request:  # Revisa los cambios antes de integrarlos
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.14
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+
+      # make crea el entorno (venv) con el Python instalado en el paso anterior
+      - name: Run ruff, mypy and pyright
+        run: make check PYTHON=python
+
   test:
+    # Las pruebas usan la API real con los secretos del repositorio, que no
+    # están disponibles en los pull requests desde forks.
+    if: >-
+      github.event_name == 'push'
+      || github.event.pull_request.head.repo.full_name == github.repository
+
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        python-version: ['3.11']  # Puedes cambiar las versiones según necesites
+        python-version: ['3.14']  # Versión mínima soportada (requires-python)
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}  # Configura la versión de Python desde la matriz
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+      - name: Display Python version
+        run: python --version
 
+      # make crea el entorno (venv) con el paquete y el grupo dev de
+      # pyproject.toml, y falla si falla alguna prueba
       - name: Run Python tests
         env:
           LIBREDTE_HASH: ${{ secrets.LIBREDTE_HASH }}
           LIBREDTE_RUT: ${{ vars.LIBREDTE_RUT }}
-        run: |
-          make tests-readonly
-
-      - name: Upload pytest result report
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: tests-results-python_${{ matrix.python-version }}.xml
-          path: var/tests-results.xml
-
-      - name: Upload Coverage Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: tests-coverage-python_${{ matrix.python-version }}.xml
-          path: var/tests-coverage.xml
-
-      - name: Display Python version
-        run: python --version
+        run: make tests-readonly PYTHON=python

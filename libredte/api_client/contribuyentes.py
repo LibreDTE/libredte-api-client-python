@@ -17,9 +17,15 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
+"""Wrapper de los recursos de contribuyentes de la API de LibreDTE."""
+
+import requests
+
 from . import ApiBase
 
+
 class Contribuyentes(ApiBase):
+
     """
     Clase para interactuar con los endpoints de contribuyentes de la API.
 
@@ -27,16 +33,16 @@ class Contribuyentes(ApiBase):
     basándose en su RUT.
     """
 
-    def get_contribuyente(self, rut):
+    def get_contribuyente(self, rut: str | int) -> requests.Response:
         """
         Obtiene la información de un contribuyente específico.
 
-        Realiza una solicitud GET para buscar información sobre un contribuyente
-        dado su RUT. Esta información puede incluir datos como el nombre del
-        contribuyente, dirección, y otros detalles relevantes.
+        Realiza una solicitud GET para buscar información sobre un
+        contribuyente dado su RUT. Esta información puede incluir datos como
+        el nombre del contribuyente, dirección, y otros detalles relevantes.
 
         :param str rut: RUT del contribuyente a buscar.
         :return: Respuesta JSON con la información del contribuyente.
         """
-        url = "/dte/contribuyentes/info/%(rut)s" % {'rut' : rut}
+        url = self._ruta('/dte/contribuyentes/info', rut)
         return self.client.get(url)

@@ -17,9 +17,15 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
+"""Wrapper de los recursos del sistema de la API de LibreDTE."""
+
+import requests
+
 from . import ApiBase
 
+
 class Moneda(ApiBase):
+
     """
     Clase para interactuar con los endpoints de moneda de la API.
 
@@ -27,21 +33,29 @@ class Moneda(ApiBase):
     como obtener tasas de cambio de moneda para fechas específicas.
     """
 
-    def get_moneda_cambios(self, to, day):
+    def get_moneda_cambios(
+        self,
+        to: str,
+        day: str | None = None,
+    ) -> requests.Response:
         """
-        Obtiene la tasa de cambio de moneda de USD a otra moneda en una fecha específica.
+        Obtiene la tasa de cambio de USD a otra moneda en una fecha.
 
-        Este método realiza una solicitud GET para obtener la tasa de cambio desde
-        USD hacia la moneda especificada por el usuario para una fecha dada. Es
-        útil para consultas de conversiones de moneda históricas o actuales.
+        Este método realiza una solicitud GET para obtener la tasa de cambio
+        desde USD hacia la moneda especificada por el usuario para una fecha
+        dada. Es útil para consultas de conversiones de moneda históricas o
+        actuales.
 
-        :param str to: Código de la moneda destino a la cual se desea convertir USD.
-        :param str day: Fecha de la consulta de la tasa de cambio.
+        :param str to: Código de la moneda destino a la cual se desea
+            convertir USD.
+        :param str day: Fecha de la consulta de la tasa de cambio
+            (AAAA-MM-DD). Si es None, la API usa la fecha de hoy.
         :return: Respuesta JSON con la tasa de cambio desde USD a la moneda
-        especificada en la fecha indicada.
+            especificada en la fecha indicada.
         """
-        url = "/sistema/general/moneda_cambios/tasa/USD/%(to)s/%(day)s" % {
-            'to' : to,
-            'day' : day
-        }
+        recurso = '/sistema/general/moneda_cambios/tasa/USD'
+        if day is None:
+            url = self._ruta(recurso, to)
+        else:
+            url = self._ruta(recurso, to, day)
         return self.client.get(url)

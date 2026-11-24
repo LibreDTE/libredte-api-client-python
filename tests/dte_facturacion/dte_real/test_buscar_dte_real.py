@@ -17,51 +17,28 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from tests.dte_facturacion.abstract_dte_facturacion import AbstractDteFacturacion
-from libredte.api_client import ApiException
+"""Pruebas de la búsqueda de un DTE real específico."""
 
-from os import getenv
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
+from tests.respuestas import leer_dte_emitido
 
-import json
 
 class TestBuscarDteReal(AbstractDteFacturacion):
-    """
-    Clase de pruebas para buscar un DTE real específico.
-    """
 
-    @classmethod
-    def setUpClass(cls):
-        """
-        Método de inicialización de variables y clases a utilizar.
-        """
-        cls.verbose = bool(int(getenv('TEST_VERBOSE', 0)))
-        cls.contribuyente_rut = getenv('LIBREDTE_RUT', '').strip()
-        cls.dte.client.set_contribuyente(cls.contribuyente_rut)
-        cls.dte.client.set_ambiente_sii(cls.dte.client.AMBIENTE_SII_PRUEBAS)
+    """Clase de pruebas para buscar un DTE real específico."""
 
-    def test_buscar_dte_real(self):
-        """
-        Método de test para obtener DTE temporal específico.
-        """
-        try:
-            # Se llama al método del abstract para listar DTEs reales.
-            dte_temp = self._listar_dtes_reales(self.contribuyente_rut)
-            # Se convierte en diccionario el resultado de la búsqueda.
-            dte_dict = dte_temp.json()
-            # Se busca el DTE real buscado previamente.
-            response = self.dte.get_dte_real(
-                dte_dict[0]['dte'],
-                dte_dict[0]['folio'],
-                self.contribuyente_rut
-            )
-            # Se asegura que el codigo sea 200.
-            self.assertEqual(response.status_code, 200)
-            # Si verbose es True, se despliega en pantalla el resultado.
-            if self.verbose:
-                print(
-                    'test_buscar_dte_real() dte: ',
-                    json.dumps(response.json())
-                )
-        except ApiException as e:
-            # Falla si se obtiene error de API Exception o si el código no es 200.
-            self.fail('ApiException: %(e)s' % {'e' : e})
+    def test_buscar_dte_real(self) -> None:
+        """La búsqueda entrega el DTE real solicitado."""
+        documento = self._primer_dte_emitido()
+        encontrado = leer_dte_emitido(
+            self.dte.get_dte_real(
+                documento['dte'],
+                documento['folio'],
+                self.contribuyente_rut,
+            ),
+        )
+        self.assertEqual(str(encontrado['folio']), str(documento['folio']))
+        self.assertEqual(str(encontrado['dte']), str(documento['dte']))
+        self._mostrar('dte', encontrado)

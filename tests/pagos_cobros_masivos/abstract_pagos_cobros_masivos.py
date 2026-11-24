@@ -17,67 +17,66 @@
 # <http://www.gnu.org/licenses/lgpl.html>.
 #
 
-from libredte.api_client.cobros import Cobros
-from libredte.api_client.dte import Dte
+"""Clase base de las pruebas de pagos y cobros masivos."""
 
 from datetime import datetime, timedelta
+from typing import ClassVar
 
-import unittest
+import requests
 
-class AbstractPagosCobrosMasivos(unittest.TestCase):
+from libredte.api_client import ApiClient
+from libredte.api_client.cobros import Cobros
+from tests.dte_facturacion.abstract_dte_facturacion import (
+    AbstractDteFacturacion,
+)
+
+
+class AbstractPagosCobrosMasivos(AbstractDteFacturacion):
+
     """
     Clase heredable para pagos y cobros masivos.
+
+    Hereda la preparación del cliente de DTE y la emisión de DTE temporales
+    (que se eliminan al terminar cada prueba, junto a su cobro si no está
+    pagado).
     """
 
-    cobros = Cobros()
-    dte = Dte()
+    cobros: ClassVar[Cobros]
 
-    def _buscar_cobro_dte_temp(self, rut, datos):
+    @classmethod
+    def setUpClass(cls) -> None:
+        """Prepara los clientes de DTE y de cobros de la API."""
+        super().setUpClass()
+        cls.cobros = Cobros()
+        cls.cobros.client.set_contribuyente(cls.contribuyente_rut)
+        cls.cobros.client.set_ambiente_sii(ApiClient.AMBIENTE_SII_PRUEBAS)
+
+    def _buscar_cobro_dte_temp(self, rut: str) -> requests.Response:
         """
-        Método heredable para buscar un cobro asociado a un DTE temporal.
+        Busca el cobro de un DTE temporal emitido para la prueba.
 
         :param str rut: RUT del emisor asociado al cobro.
-        :param dict datos: Datos del DTE temporal a generar.
-        :return: Respuesta JSON con el cobro buscado.
+        :return: Respuesta JSON con el cobro del DTE temporal.
         """
-        dte_temp = self.__emitir_dte_temporal(datos)
-        dte_dict = dte_temp.json()
-        cobro = self.cobros.get_cobro_dte_temporal(
-            dte_dict['receptor'],
-            dte_dict['dte'],
-            dte_dict['codigo'],
-            rut
+        dte_temporal = self._emitir_dte_temporal(self.datos)
+        return self.cobros.get_cobro_dte_temporal(
+            dte_temporal['receptor'],
+            dte_temporal['dte'],
+            dte_temporal['codigo'],
+            rut,
         )
 
-        return cobro
-
-    def _listar_cobros(self, rut):
+    def _listar_cobros(self, rut: str) -> requests.Response:
         """
         Método heredable para listar cobros.
 
         :param str rut: RUT del emisor del cobro.
         :return: Respuesta JSON con el listado de cobros.
         """
+        hoy = datetime.now().astimezone()
         filtros = {
-            'fecha_desde': (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d'),
-            'fecha_hasta': datetime.now().strftime('%Y-%m-%d'),
-            'pagado': False
+            'fecha_desde': (hoy - timedelta(days=30)).strftime('%Y-%m-%d'),
+            'fecha_hasta': hoy.strftime('%Y-%m-%d'),
+            'pagado': False,
         }
-
-        lista_cobros = self.cobros.get_cobros(
-            rut,
-            filtros
-        )
-
-        return lista_cobros
-
-    def __emitir_dte_temporal(self, datos):
-        """
-        Método privado para emitir un DTE temporal.
-
-        :param dict datos: Datos del DTE temporal a generar.
-        :return: Respuesta JSON con el DTE temporal generado.
-        """
-        dte_temporal = self.dte.emitir_dte_temporal(datos)
-
-        return dte_temporal
+        return self.cobros.get_cobros(rut, filtros)
