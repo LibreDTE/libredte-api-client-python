@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "libredte"
 
 # Versions should comply with PEP440
-version = "5.0.1"
+version = "5.0.2"
 
 description = "Cliente para realizar la integración con los servicios web de LibreDTE desde Python."
 readme = "README.rst"
