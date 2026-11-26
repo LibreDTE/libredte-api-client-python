@@ -276,12 +276,7 @@ class ApiClient:
         if valor is None or valor == '':
             self.rut = None
             return self.rut
-        valor = _rut_sin_dv(valor)
-        try:
-            self.rut = int(valor)
-        except ValueError as error:
-            msg = f'Valor de RUT inválido: {valor}'
-            raise ApiException(msg) from error
+        self.rut = _parsear_rut(valor)
         return self.rut
 
     def set_hash(self, api_hash: str | None) -> None:
@@ -582,14 +577,11 @@ class ApiClient:
             recibe truncado: su router separa la ruta por '/' antes de
             decodificarla.
         """
-        valor = rut or self.rut
-        msg = f'Valor de RUT inválido: {valor}'
+        valor = rut if rut is not None else self.rut
         if valor is None:
+            msg = f'Valor de RUT inválido: {valor}'
             raise ApiException(msg)
-        try:
-            rut_numero = int(_rut_sin_dv(valor))
-        except ValueError as error:
-            raise ApiException(msg) from error
+        rut_numero = _parsear_rut(valor)
         link = f'{self.url}/dte/contribuyentes/seleccionar/{rut_numero}'
         if resource:
             resource_base64 = base64.b64encode(
@@ -600,18 +592,36 @@ class ApiClient:
         return link
 
 
-def _rut_sin_dv(rut: int | str) -> int | str:
+def _parsear_rut(rut: int | str) -> int:
     """
-    Quita los puntos y el dígito verificador de un RUT en texto con DV.
+    Valida y convierte un RUT (con o sin dígito verificador) a entero positivo.
 
     :param rut: RUT, por ejemplo 76192083 o '76.192.083-9'.
     :type rut: int, str
-    :return: RUT sin dígito verificador (sin convertir a entero).
-    :rtype: int, str
+    :return: Cuerpo numérico positivo del RUT, sin dígito verificador.
+    :rtype: int
+    :raises ApiException: Si el RUT es booleano, no positivo o mal formado.
     """
-    if isinstance(rut, str) and '-' in rut:
-        return rut.replace('.', '').split('-')[0]
-    return rut
+    msg = f'Valor de RUT inválido: {rut}'
+    if isinstance(rut, bool):
+        raise ApiException(msg)
+    if isinstance(rut, int):
+        if rut <= 0:
+            raise ApiException(msg)
+        return rut
+    texto = rut.strip().replace('.', '')
+    if '-' in texto:
+        cuerpo, _, dv = texto.partition('-')
+        if not (len(dv) == 1 and (dv.isdigit() or dv in 'kK')):
+            raise ApiException(msg)
+    else:
+        cuerpo = texto
+    if not cuerpo.isdigit():
+        raise ApiException(msg)
+    numero = int(cuerpo)
+    if numero <= 0:
+        raise ApiException(msg)
+    return numero
 
 
 def _is_dict(value: object) -> TypeIs[dict[str, object]]:
