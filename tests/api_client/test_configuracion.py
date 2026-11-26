@@ -59,9 +59,22 @@ class TestConfiguracion(unittest.TestCase):
         self.assertIsNone(self.client.rut)
 
     def test_contribuyente_invalido(self) -> None:
-        """Un RUT que no es número es un error."""
-        with self.assertRaises(ApiException):
-            self.client.set_contribuyente('abc')
+        """Un RUT no numérico, booleano, no positivo o mal formado falla."""
+        invalidos: tuple[int | str, ...] = (
+            'abc',
+            True,
+            False,
+            0,
+            -76192083,
+            '76192083-',
+            '1-2-3',
+        )
+        for invalido in invalidos:
+            with (
+                self.subTest(invalido=invalido),
+                self.assertRaises(ApiException),
+            ):
+                self.client.set_contribuyente(invalido)
 
     def test_ambiente_sin_distinguir_mayusculas(self) -> None:
         """'Produccion' o ' TEST ' son válidos, como en minúsculas."""

@@ -171,6 +171,16 @@ class TestCreateLink(unittest.TestCase):
             + recurso_base64.replace('+', '%2B'),
         )
 
+    def test_rut_explicito_invalido_no_usa_el_configurado(self) -> None:
+        """Un RUT explícito vacío o 0 falla en vez de usar self.rut."""
+        self.client.set_contribuyente(76192083)
+        for rut_invalido in ('', 0, False, -1, '76192083-'):
+            with (
+                self.subTest(rut_invalido=rut_invalido),
+                self.assertRaises(ApiException),
+            ):
+                self.client.create_link('/dte/dte_emitidos', rut_invalido)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
